@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Virgilio Guida Tv</string>
+    <string name="select_day_title">Virgilio Guida Tv - Selezione giorno</string>
+    <string name="select_day_intro">Seleziona un giorno per visualizzarne il palisesto</string>
+    <string name="select_day_format">dd/MM</string>
+    <string name="contacting_server">In attesa di risposta dal server...</string>
+    <string name="analyzing_data">Analisi dei dati in corso...</string>
+    <string name="saving_data">Salvataggio dati in corso...</string>
+    <string name="loading_data">Caricamento dati in corso...</string>
+    
+    <string name="error_title">Errore</string>
+    <string name="error_text">Si è verificato un errore:</string>
+    <string name="error_back_button">Indietro</string>
+    
+    <string name="select_channel_title">Virgilio Guida Tv - Selezione canale</string>
+</resources>
