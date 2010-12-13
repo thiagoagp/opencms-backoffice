@@ -20,17 +20,10 @@ public class Channel implements Serializable {
 	private String name;
 	private List<String> types;
 	private List<TVProgram> tvPrograms;
-
-	public Channel(String strId, String name) {
-		this(-1, strId, name, null);
-	}
+	private Programs programs;
 
 	public Channel(long id, String strId, String name) {
 		this(id, strId, name, null);
-	}
-
-	public Channel(String strId, String name, List<String> types) {
-		this(-1, strId, name, types);
 	}
 
 	public Channel(long id, String strId, String name, List<String> types) {
@@ -41,65 +34,17 @@ public class Channel implements Serializable {
 		tvPrograms = new LinkedList<TVProgram>();
 	}
 
+	public Channel(String strId, String name) {
+		this(-1, strId, name, null);
+	}
+
+	public Channel(String strId, String name, List<String> types) {
+		this(-1, strId, name, types);
+	}
+
 	public void addTVProgram(TVProgram tvProgram) {
 		tvPrograms.add(tvProgram);
 		tvProgram.setChannel(this);
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public String getStrId() {
-		return strId;
-	}
-
-	public List<TVProgram> getTVPrograms() {
-		return tvPrograms;
-	}
-
-	public List<String> getTypes() {
-		return types;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public void setStrId(String strId) {
-		this.strId = strId;
-	}
-
-	public void setTVPrograms(List<TVProgram> tvPrograms) {
-		this.tvPrograms = tvPrograms;
-		for(TVProgram program : tvPrograms) {
-			program.setChannel(this);
-		}
-	}
-
-	public void setTypes(List<String> types) {
-		this.types = types;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((strId == null) ? 0 : strId.hashCode());
-		result = prime * result
-				+ ((tvPrograms == null) ? 0 : tvPrograms.hashCode());
-		result = prime * result + ((types == null) ? 0 : types.hashCode());
-		return result;
 	}
 
 	@Override
@@ -134,6 +79,70 @@ public class Channel implements Serializable {
 		} else if (!types.equals(other.types))
 			return false;
 		return true;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public Programs getPrograms() {
+		return programs;
+	}
+
+	public String getStrId() {
+		return strId;
+	}
+
+	public List<TVProgram> getTVPrograms() {
+		return tvPrograms;
+	}
+
+	public List<String> getTypes() {
+		return types;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((strId == null) ? 0 : strId.hashCode());
+		result = prime * result
+				+ ((tvPrograms == null) ? 0 : tvPrograms.hashCode());
+		result = prime * result + ((types == null) ? 0 : types.hashCode());
+		return result;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setPrograms(Programs programs) {
+		this.programs = programs;
+	}
+
+	public void setStrId(String strId) {
+		this.strId = strId;
+	}
+
+	public void setTVPrograms(List<TVProgram> tvPrograms) {
+		this.tvPrograms = tvPrograms;
+		for(TVProgram program : tvPrograms) {
+			program.setChannel(this);
+		}
+	}
+
+	public void setTypes(List<String> types) {
+		this.types = types;
 	}
 
 	@Override

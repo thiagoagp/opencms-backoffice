@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<color name="default_day">#00FFFFFF</color>
-	<color name="actual_day">#15FFFFFF</color>
+	<color name="actual_day">#30FFFFFF</color>
 	<color name="start_hour">#FFFFFFFF</color>
-	<color name="start_hour_back">#FF10D210</color>
+	<color name="start_hour_back">#FF14B214</color>
 	<color name="end_hour">#FF000000</color>
-	<color name="end_hour_back">#FFD21010</color>
+	<color name="end_hour_back">#FFB21414</color>
+	<color name="default_program">#00FFFFFF</color>
+	<color name="actual_program">#30FFFFFF</color>
 </resources>

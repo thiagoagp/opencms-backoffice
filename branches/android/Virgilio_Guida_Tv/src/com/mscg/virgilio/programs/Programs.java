@@ -35,6 +35,7 @@ public class Programs implements Serializable {
 
 	public void addChannel(Channel channel) {
 		channels.add(channel);
+		channel.setPrograms(this);
 	}
 
 	public List<Channel> getChannels() {
