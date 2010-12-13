@@ -5,17 +5,10 @@
     android:layout_height="fill_parent"
     >
     
-    <TextView
-        android:id="@+id/channelsListIntro"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        style="@style/daysListIntro" />
-    
     <ListView
-        android:id="@+id/channelsList"
+        android:id="@+id/programsList"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textFilterEnabled="true"
         android:fastScrollEnabled="true" />
     
 </LinearLayout>

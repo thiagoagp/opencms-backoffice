@@ -2,4 +2,8 @@
 <resources>
 	<color name="default_day">#00FFFFFF</color>
 	<color name="actual_day">#15FFFFFF</color>
+	<color name="start_hour">#FFFFFFFF</color>
+	<color name="start_hour_back">#FF10D210</color>
+	<color name="end_hour">#FF000000</color>
+	<color name="end_hour_back">#FFD21010</color>
 </resources>

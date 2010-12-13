@@ -1,5 +1,6 @@
 package com.mscg.virgilio;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.app.Activity;
@@ -8,16 +9,21 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.mscg.virgilio.adapters.ChannelListItemAdapter;
 import com.mscg.virgilio.handlers.DownloadProgressHandler;
+import com.mscg.virgilio.listener.ChannelSelectionClickListener;
 import com.mscg.virgilio.programs.Channel;
 import com.mscg.virgilio.programs.Programs;
 import com.mscg.virgilio.util.CacheManager;
+import com.mscg.virgilio.util.Util;
 
 public class VirgilioGuidaTvChannelSelection extends Activity {
 
+	private TextView channelsListIntro;
 	private ListView channelsList;
-	private ArrayAdapter<String> channelsListAdapter;
+	private ArrayAdapter<Channel> channelsListAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +31,15 @@ public class VirgilioGuidaTvChannelSelection extends Activity {
 
 		setContentView(R.layout.channels_selection);
 
+		channelsListIntro = (TextView) findViewById(R.id.channelsListIntro);
 		channelsList = (ListView) findViewById(R.id.channelsList);
+		channelsList.setOnItemClickListener(new ChannelSelectionClickListener(this));
+
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
 
 		Intent intent = getIntent();
 		Date day = null;
@@ -36,16 +50,24 @@ public class VirgilioGuidaTvChannelSelection extends Activity {
 				"Cannot get programs date from intent", e);
 		}
 
-		Programs programs = CacheManager.getInstance().getProgramsForDay(day);
+		if(day != null) {
+			Programs programs = CacheManager.getInstance().getProgramsForDay(day);
 
-		if(programs != null) {
-			String channels[] = new String[programs.getChannels().size()];
-			int i = 0;
-			for(Channel channel : programs.getChannels()) {
-				channels[i++] = channel.getName();
+			if(programs != null) {
+				day = programs.getDate();
+
+				channelsListAdapter = new ChannelListItemAdapter(this, R.layout.channel_list_layout, programs.getChannels());
+				channelsList.setAdapter(channelsListAdapter);
+
+				SimpleDateFormat dayFormat = new SimpleDateFormat("EEEEE");
+				SimpleDateFormat dateFormat = new SimpleDateFormat(", dd/MM");
+				String intro = getString(R.string.select_channel_intro);
+				intro = intro.replace("${dayName}", Util.capitalize(dayFormat.format(day)) + dateFormat.format(day));
+				channelsListIntro.setText(intro);
 			}
-			channelsListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, channels);
-			channelsList.setAdapter(channelsListAdapter);
+		}
+		else {
+			channelsListIntro.setText(R.string.select_channel_fail);
 		}
 	}
 

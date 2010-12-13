@@ -98,8 +98,10 @@ public class VirgilioGuidaTvDaySelection extends Activity {
 	}
 
 	public void showDownloadDialog(int id) {
-		showDialog(id);
+		//showDialog(id);
+		onCreateDialog(id);
 		progressDialog = progressDialogs.get(id);
+		progressDialog.show();
 	}
 
 }

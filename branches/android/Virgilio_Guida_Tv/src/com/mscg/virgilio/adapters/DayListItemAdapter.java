@@ -1,33 +1,32 @@
 package com.mscg.virgilio.adapters;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.TimeZone;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.mscg.virgilio.R;
 import com.mscg.virgilio.util.DayLinearLayout;
 import com.mscg.virgilio.util.Util;
 
-public class DayListItemAdapter extends ArrayAdapter<Integer> {
+public class DayListItemAdapter extends GenericListItemAdapter<Integer> {
 
-	private int resource;
-	private LayoutInflater vi;
 	private SimpleDateFormat dateFormat;
 	private SimpleDateFormat dayFormat;
 
-	public DayListItemAdapter(Context context, int resource, Integer[] objects) {
-		super(context, resource, objects);
-		this.resource = resource;
-		String inflater = Context.LAYOUT_INFLATER_SERVICE;
-		vi = (LayoutInflater) getContext().getSystemService(inflater);
+	public DayListItemAdapter(Context context, int textViewResourceId, Integer[] objects) {
+		this(context, textViewResourceId, Arrays.asList(objects));
+	}
+
+	public DayListItemAdapter(Context context, int textViewResourceId, List<Integer> objects) {
+		super(context, textViewResourceId, objects);
 		dateFormat = new SimpleDateFormat(getContext().getString(R.string.select_day_format));
 		dayFormat = new SimpleDateFormat("EEEEE");
 	}
@@ -38,7 +37,7 @@ public class DayListItemAdapter extends ArrayAdapter<Integer> {
 		Integer dayOffset = getItem(position);
 		if(convertView == null) {
 			dayView = new DayLinearLayout(getContext());
-			vi.inflate(resource, dayView, true);
+			vi.inflate(textViewResourceId, dayView, true);
 		}
 		else {
 			dayView = (DayLinearLayout)convertView;

@@ -14,4 +14,28 @@
 	<style name="daysListStyle" parent="textStyle">
 	   <item name="android:padding">10dp</item>
 	</style>
+
+	<style name="startHourStyle" parent="daysListStyle">
+	   <item name="android:textColor">@color/start_hour</item>
+	   <item name="android:background">@color/start_hour_back</item>
+	</style>
+
+	<style name="endHourStyle" parent="daysListStyle">
+	   <item name="android:textColor">@color/end_hour</item>
+	   <item name="android:background">@color/end_hour_back</item>
+	</style>
+
+	<style name="programNameStyle" parent="textStyle">
+	   <item name="android:textStyle">bold</item>
+	   <item name="android:paddingTop">5dp</item>
+	   <item name="android:paddingLeft">10dp</item>
+	</style>
+
+	<style name="programCategoryStyle" parent="textStyle">
+	   <item name="android:paddingLeft">10dp</item>
+	   <item name="android:paddingBottom">5dp</item>
+	</style>
+	
+	<style name="programNameBoxStyle">
+	</style>
 </resources>

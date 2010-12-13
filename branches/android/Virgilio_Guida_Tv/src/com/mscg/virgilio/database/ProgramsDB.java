@@ -51,16 +51,20 @@ public class ProgramsDB implements Closeable, ProgramsManagement {
 	public static class CHANNELS_PROGRAMS_CONSTS {
 		public static final String TABLE_NAME = "channel_to_programs";
 
+		public static final String ID_COL = "id";
+		public static final int ID_COL_INDEX = 0;
+
 		public static final String PROGRAMS_COL = "programs_id";
-		public static final int PROGRAMS_COL_INDEX = 0;
+		public static final int PROGRAMS_COL_INDEX = ID_COL_INDEX + 1;
 
 		public static final String CHANNEL_COL = "channel_id";
-		public static final int CHANNEL_COL_INDEX = PROGRAMS_COL_INDEX + 1;
+		public static final int CHANNEL_COL_INDEX = ID_COL_INDEX + 2;
 
 		public static final int COLUMN_COUNT = 2;
 
 		public static final String CREATE_QUERY =
 			"CREATE TABLE " + TABLE_NAME + "(" +
+				ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
 				PROGRAMS_COL + " INTEGER NOT NULL, " +
 				CHANNEL_COL + " INTEGER NOT NULL, " +
 				"FOREIGN KEY (" + PROGRAMS_COL + ") REFERENCES " + PROGRAMS_CONSTS.TABLE_NAME + "(" + PROGRAMS_CONSTS.ID_COL + ") " +
@@ -95,48 +99,7 @@ public class ProgramsDB implements Closeable, ProgramsManagement {
 		public static final String DROP_QUERY =
 			"DROP TABLE " + TABLE_NAME;
 	}
-	private static class ProgramsDBHelper extends SQLiteOpenHelper {
 
-		public ProgramsDBHelper(Context context, String name, CursorFactory factory, int version) {
-			super(context, name, factory, version);
-		}
-
-		@Override
-		public void onCreate(SQLiteDatabase db) {
-			db.beginTransaction();
-			try {
-				db.execSQL(PROGRAMS_CONSTS.CREATE_QUERY);
-				db.execSQL(CHANNEL_CONSTS.CREATE_QUERY);
-				db.execSQL(CHANNELS_PROGRAMS_CONSTS.CREATE_QUERY);
-				db.execSQL(TV_PROGRAM_CONSTS.CREATE_QUERY);
-				db.setTransactionSuccessful();
-			} finally {
-				db.endTransaction();
-			}
-		}
-
-		@Override
-		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			Log.w(ProgramsDBHelper.class.getCanonicalName(),
-				"Upgrading DB from version " + oldVersion + " to version " + newVersion + ". " +
-				"Old data will be lost.");
-
-			db.beginTransaction();
-			try {
-				db.execSQL(TV_PROGRAM_CONSTS.DROP_QUERY);
-				db.execSQL(CHANNELS_PROGRAMS_CONSTS.DROP_QUERY);
-				db.execSQL(CHANNEL_CONSTS.DROP_QUERY);
-				db.execSQL(PROGRAMS_CONSTS.DROP_QUERY);
-
-				db.setTransactionSuccessful();
-			} catch(Exception e) {
-				db.endTransaction();
-			}
-
-			onCreate(db);
-		}
-
-	}
 	public static class TV_PROGRAM_CONSTS {
 		public static final String TABLE_NAME = "tv_program";
 
@@ -172,7 +135,7 @@ public class ProgramsDB implements Closeable, ProgramsManagement {
 				ENDTIME_COL + " LONG, " +
 				CATEGORY_COL + " TEXT, " +
 				CHANNEL_COL + " INTEGER NOT NULL, " +
-				"FOREIGN KEY (" + CHANNEL_COL + ") REFERENCES " + CHANNEL_CONSTS.TABLE_NAME + "(" + CHANNEL_CONSTS.ID_COL + ") " +
+				"FOREIGN KEY (" + CHANNEL_COL + ") REFERENCES " + CHANNELS_PROGRAMS_CONSTS.TABLE_NAME + "(" + CHANNELS_PROGRAMS_CONSTS.ID_COL + ") " +
 					"ON DELETE CASCADE ON UPDATE CASCADE" +
 			")";
 		public static final String DROP_QUERY =
@@ -241,6 +204,36 @@ public class ProgramsDB implements Closeable, ProgramsManagement {
 		return ret;
 	}
 
+	protected long getJoinIDForChannelAndProgram(long programID, long channelID) {
+		if(db == null)
+			throw new SQLException("The DB is not opened.");
+
+		long ret = -1;
+		Cursor c = null;
+		try {
+			c = db.query(
+				CHANNELS_PROGRAMS_CONSTS.TABLE_NAME,
+				new String[]{CHANNELS_PROGRAMS_CONSTS.ID_COL},
+				CHANNELS_PROGRAMS_CONSTS.PROGRAMS_COL + " = ? AND " +
+				CHANNELS_PROGRAMS_CONSTS.CHANNEL_COL + " = ?",
+				new String[]{Long.toString(programID), Long.toString(channelID)},
+				null, null, null);
+
+			if(c.getCount() > 0 && c.moveToFirst()) {
+				ret = c.getLong(0);
+			}
+
+		} catch(Exception e) {
+
+		} finally {
+			try {
+				c.close();
+			} catch(Exception e){}
+		}
+
+		return ret;
+	}
+
 	/* (non-Javadoc)
 	 * @see com.mscg.virgilio.database.ProgramsManagement#getProgramsCursorForDay(java.util.Date)
 	 */
@@ -284,7 +277,7 @@ public class ProgramsDB implements Closeable, ProgramsManagement {
 						CHANNEL_CONSTS.TABLE_NAME + " AS c, " + TV_PROGRAM_CONSTS.TABLE_NAME + " AS t " +
 					"WHERE cp." + CHANNELS_PROGRAMS_CONSTS.PROGRAMS_COL + " = ? " +
 					"  AND cp." + CHANNELS_PROGRAMS_CONSTS.CHANNEL_COL + " = c." + CHANNEL_CONSTS.ID_COL + " " +
-					"  AND t." + TV_PROGRAM_CONSTS.CHANNEL_COL + " = c." + CHANNEL_CONSTS.ID_COL,
+					"  AND t." + TV_PROGRAM_CONSTS.CHANNEL_COL + " = cp." + CHANNELS_PROGRAMS_CONSTS.ID_COL,
 					new String[]{"" + ret.getId()});
 
 				Channel curChann = null;
@@ -383,6 +376,7 @@ public class ProgramsDB implements Closeable, ProgramsManagement {
 					} catch(Exception e){}
 				}
 
+				long joinID = -1;
 				if(channel.getId() < 0) {
 					channel.setId(channelID);
 
@@ -390,7 +384,12 @@ public class ProgramsDB implements Closeable, ProgramsManagement {
 					ContentValues joinValues = new ContentValues();
 					joinValues.put(CHANNELS_PROGRAMS_CONSTS.PROGRAMS_COL, programs.getId());
 					joinValues.put(CHANNELS_PROGRAMS_CONSTS.CHANNEL_COL, channel.getId());
-					db.insert(CHANNELS_PROGRAMS_CONSTS.TABLE_NAME, null, joinValues);
+					joinID = db.insert(CHANNELS_PROGRAMS_CONSTS.TABLE_NAME, null, joinValues);
+					if(joinID < 0)
+						throw new SQLException("Cannot save join informations in the DB.");
+				}
+				else {
+					joinID = getJoinIDForChannelAndProgram(programs.getId(), channel.getId());
 				}
 
 				for(TVProgram tvprogram : channel.getTVPrograms()) {
@@ -401,7 +400,7 @@ public class ProgramsDB implements Closeable, ProgramsManagement {
 					progValues.put(TV_PROGRAM_CONSTS.STARTTIME_COL, tvprogram.getStartTime().getTime());
 					progValues.put(TV_PROGRAM_CONSTS.ENDTIME_COL, tvprogram.getEndTime().getTime());
 					progValues.put(TV_PROGRAM_CONSTS.CATEGORY_COL, tvprogram.getCategory());
-					progValues.put(TV_PROGRAM_CONSTS.CHANNEL_COL, channel.getId());
+					progValues.put(TV_PROGRAM_CONSTS.CHANNEL_COL, joinID);
 
 					long progID = db.insert(TV_PROGRAM_CONSTS.TABLE_NAME, null, progValues);
 					if(progID < 0)
@@ -417,6 +416,49 @@ public class ProgramsDB implements Closeable, ProgramsManagement {
 		}
 
 		return programs;
+	}
+
+	private static class ProgramsDBHelper extends SQLiteOpenHelper {
+
+		public ProgramsDBHelper(Context context, String name, CursorFactory factory, int version) {
+			super(context, name, factory, version);
+		}
+
+		@Override
+		public void onCreate(SQLiteDatabase db) {
+			db.beginTransaction();
+			try {
+				db.execSQL(PROGRAMS_CONSTS.CREATE_QUERY);
+				db.execSQL(CHANNEL_CONSTS.CREATE_QUERY);
+				db.execSQL(CHANNELS_PROGRAMS_CONSTS.CREATE_QUERY);
+				db.execSQL(TV_PROGRAM_CONSTS.CREATE_QUERY);
+				db.setTransactionSuccessful();
+			} finally {
+				db.endTransaction();
+			}
+		}
+
+		@Override
+		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+			Log.w(ProgramsDBHelper.class.getCanonicalName(),
+				"Upgrading DB from version " + oldVersion + " to version " + newVersion + ". " +
+				"Old data will be lost.");
+
+			db.beginTransaction();
+			try {
+				db.execSQL(TV_PROGRAM_CONSTS.DROP_QUERY);
+				db.execSQL(CHANNELS_PROGRAMS_CONSTS.DROP_QUERY);
+				db.execSQL(CHANNEL_CONSTS.DROP_QUERY);
+				db.execSQL(PROGRAMS_CONSTS.DROP_QUERY);
+
+				db.setTransactionSuccessful();
+			} catch(Exception e) {
+				db.endTransaction();
+			}
+
+			onCreate(db);
+		}
+
 	}
 
 }

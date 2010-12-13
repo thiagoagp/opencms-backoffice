@@ -17,6 +17,10 @@
         <activity android:name=".VirgilioGuidaTvChannelSelection"
                   android:label="@string/select_channel_title">
         </activity>
+        
+        <activity android:name=".VirgilioGuidaTvPrograms"
+                  android:label="@string/programs_list_title_simple">
+        </activity>
 
     </application>
 

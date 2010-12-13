@@ -14,4 +14,10 @@
     <string name="error_back_button">Indietro</string>
     
     <string name="select_channel_title">Virgilio Guida Tv - Selezione canale</string>
+    <string name="select_channel_intro">${dayName} - Seleziona un canale dalla lista per vederne la programmazione</string>
+    <string name="select_channel_fail">Non è stato possibile caricare la lista dei canali per il giorno selezionato</string>
+
+    <string name="programs_list_title_simple">Virgilio Guida Tv - Programmi</string>
+    <string name="programs_list_title">Virgilio Guida Tv - ${channelName} - Programmi</string>
+    <string name="hours_format">HH:mm</string>
 </resources>
