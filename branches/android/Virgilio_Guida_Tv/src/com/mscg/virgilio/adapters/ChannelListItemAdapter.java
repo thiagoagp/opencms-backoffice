@@ -26,20 +26,30 @@ public class ChannelListItemAdapter extends GenericListItemAdapter<Channel> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ChannelLinearLayout itemView = null;
 		Channel channel = getItem(position);
+
+		InfoHolder holder = null;
+
 		if(convertView == null) {
 			itemView = new ChannelLinearLayout(null, getContext());
 			vi.inflate(textViewResourceId, itemView, true);
+			holder = new InfoHolder();
+			holder.textView = (TextView)itemView.findViewById(R.id.channelName);
+			itemView.setTag(holder);
 		}
 		else {
 			itemView = (ChannelLinearLayout)convertView;
+			holder = (InfoHolder)itemView.getTag();
 		}
 
 		itemView.setChannel(channel);
 
-		TextView channelText = (TextView)itemView.findViewById(R.id.channelName);
-		channelText.setText(channel.getName());
+		holder.textView.setText(channel.getName());
 
 		return itemView;
+	}
+
+	private class InfoHolder {
+		TextView textView;
 	}
 
 }

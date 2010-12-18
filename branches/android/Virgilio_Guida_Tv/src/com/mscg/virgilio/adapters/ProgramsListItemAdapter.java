@@ -30,11 +30,20 @@ public class ProgramsListItemAdapter extends GenericListItemAdapter<TVProgram> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View itemView = null;
 
+		InfoHolder holder = null;
+
 		if(convertView == null) {
 			itemView = vi.inflate(textViewResourceId, null, true);
+			holder = new InfoHolder();
+			holder.startHour = (TextView)itemView.findViewById(R.id.startHour);
+			holder.endHour = (TextView)itemView.findViewById(R.id.endHour);
+			holder.programName = (TextView)itemView.findViewById(R.id.programName);
+			holder.programCategory = (TextView)itemView.findViewById(R.id.programCategory);
+			itemView.setTag(holder);
 		}
 		else {
 			itemView = convertView;
+			holder = (InfoHolder)itemView.getTag();
 		}
 
 		TVProgram program = getItem(position);
@@ -54,17 +63,19 @@ public class ProgramsListItemAdapter extends GenericListItemAdapter<TVProgram> {
 //		else
 //			itemView.setBackgroundColor(R.color.default_program);
 
-		TextView startHour = (TextView)itemView.findViewById(R.id.startHour);
-		TextView endHour = (TextView)itemView.findViewById(R.id.endHour);
-		TextView programName = (TextView)itemView.findViewById(R.id.programName);
-		TextView programCategory = (TextView)itemView.findViewById(R.id.programCategory);
-
-		startHour.setText(hourFormatter.format(program.getStartTime()));
-		endHour.setText(hourFormatter.format(program.getEndTime()));
-		programName.setText(program.getName());
-		programCategory.setText(program.getCategory());
+		holder.startHour.setText(hourFormatter.format(program.getStartTime()));
+		holder.endHour.setText(hourFormatter.format(program.getEndTime()));
+		holder.programName.setText(program.getName());
+		holder.programCategory.setText(program.getCategory());
 
 		return itemView;
+	}
+
+	private class InfoHolder {
+		TextView startHour;
+		TextView endHour;
+		TextView programName;
+		TextView programCategory;
 	}
 
 }

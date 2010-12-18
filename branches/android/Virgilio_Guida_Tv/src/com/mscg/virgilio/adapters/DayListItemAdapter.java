@@ -35,12 +35,20 @@ public class DayListItemAdapter extends GenericListItemAdapter<Integer> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		DayLinearLayout dayView = null;
 		Integer dayOffset = getItem(position);
+
+		InfoHolder holder = null;
+
 		if(convertView == null) {
 			dayView = new DayLinearLayout(getContext());
 			vi.inflate(textViewResourceId, dayView, true);
+			holder = new InfoHolder();
+			holder.dayName = (TextView)dayView.findViewById(R.id.dayName);
+			holder.dayNumber = (TextView)dayView.findViewById(R.id.dayNumber);
+			dayView.setTag(holder);
 		}
 		else {
 			dayView = (DayLinearLayout)convertView;
+			holder = (InfoHolder)dayView.getTag();
 		}
 
 		Calendar now = new GregorianCalendar();
@@ -55,12 +63,15 @@ public class DayListItemAdapter extends GenericListItemAdapter<Integer> {
 //		else
 //			dayView.setBackgroundColor(getContext().getResources().getColor(R.color.default_day));
 
-		((TextView)dayView.findViewById(R.id.dayName)).setText(
-			Util.capitalize(dayFormat.format(now.getTime()))
-		);
-		((TextView)dayView.findViewById(R.id.dayNumber)).setText(dateFormat.format(now.getTime()));
+		holder.dayName.setText(Util.capitalize(dayFormat.format(now.getTime())));
+		holder.dayNumber.setText(dateFormat.format(now.getTime()));
 
 		return dayView;
+	}
+
+	private class InfoHolder {
+		TextView dayName;
+		TextView dayNumber;
 	}
 
 }
