@@ -45,12 +45,12 @@ public class VirgilioGuidaTvDaySelection extends Activity {
         HttpClientManager.open();
         guiHandler = new DownloadProgressHandler(this);
 
-        setContentView(R.layout.day_selection);
+        setContentView(R.layout.days_selection);
 
         daysList = (ListView)findViewById(R.id.daysList);
         daysListAdapter = new DayListItemAdapter(
         	this,
-        	R.layout.days_list_layout,
+        	R.layout.day_list_layout,
         	days);
 
         daysList.setAdapter(daysListAdapter);

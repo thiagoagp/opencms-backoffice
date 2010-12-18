@@ -50,10 +50,10 @@ public class DayListItemAdapter extends GenericListItemAdapter<Integer> {
 		dayCal.setTimeInMillis(now.getTimeInMillis());
 		dayView.setDay(dayCal);
 
-		if(position == 0)
-			dayView.setBackgroundColor(getContext().getResources().getColor(R.color.actual_day));
-		else
-			dayView.setBackgroundColor(getContext().getResources().getColor(R.color.default_day));
+//		if(position == 0)
+//			dayView.setBackgroundColor(getContext().getResources().getColor(R.color.actual_day));
+//		else
+//			dayView.setBackgroundColor(getContext().getResources().getColor(R.color.default_day));
 
 		((TextView)dayView.findViewById(R.id.dayName)).setText(
 			Util.capitalize(dayFormat.format(now.getTime()))

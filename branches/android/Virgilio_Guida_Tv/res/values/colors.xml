@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="list_element_bg_color_top">#3A3A3A</color>
+    <color name="list_element_bg_color_bottom">#181818</color>
 	<color name="default_day">#00FFFFFF</color>
 	<color name="actual_day">#30FFFFFF</color>
 	<color name="start_hour">#FFFFFFFF</color>
