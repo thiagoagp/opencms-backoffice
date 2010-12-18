@@ -10,10 +10,12 @@ import android.widget.ListView;
 import com.mscg.virgilio.adapters.ProgramsListItemAdapter;
 import com.mscg.virgilio.programs.Channel;
 import com.mscg.virgilio.programs.TVProgram;
+import com.mscg.virgilio.util.CacheManager;
 
 public class VirgilioGuidaTvPrograms extends Activity {
 
 	public static final String CHANNEL = VirgilioGuidaTvPrograms.class.getCanonicalName() + ".channel";
+	public static final String PROGRAMS = VirgilioGuidaTvPrograms.class.getCanonicalName() + ".programs";
 
 	private ArrayAdapter<TVProgram> programsAdapter;
 	private ListView programsListView;
@@ -36,7 +38,17 @@ public class VirgilioGuidaTvPrograms extends Activity {
 		if(intent != null) {
 			Channel channel = null;
 			try {
-				channel = (Channel) intent.getSerializableExtra(CHANNEL);
+				long programsID = intent.getLongExtra(PROGRAMS, -1);
+				long channelID = intent.getLongExtra(CHANNEL, -1);
+				if(programsID >= 0 && channelID >= 0) {
+					channel = CacheManager.getInstance().getChannel(programsID, channelID, true);
+					if(channel == null) {
+						// TODO: load from DB
+						throw new NullPointerException("Cannot find channel info");
+					}
+				}
+				else
+					throw new Exception("Invalid intent paramenters");
 			} catch(Exception e) {
 				Log.e(VirgilioGuidaTvPrograms.class.getCanonicalName(),
 					"Cannot get channel from intent", e);
@@ -47,7 +59,9 @@ public class VirgilioGuidaTvPrograms extends Activity {
 				title = title.replace("${channelName}", channel.getName());
 				setTitle(title);
 
-				programsAdapter = new ProgramsListItemAdapter(this, R.layout.program_list_layout, channel.getTVPrograms());
+				programsAdapter = new ProgramsListItemAdapter(this,
+					R.layout.program_list_layout,
+					channel.getTVPrograms());
 				programsListView.setAdapter(programsAdapter);
 			}
 		}

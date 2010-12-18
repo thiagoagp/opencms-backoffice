@@ -66,7 +66,7 @@ public class DownloadProgressHandler extends Handler {
 				context.getProgressDialog().dismiss();
 			AlertDialog.Builder ad = new AlertDialog.Builder(context);
 			ad.setTitle(context.getString(R.string.error_title));
-			ad.setMessage(context.getString(R.string.error_text) + b.getString(MESSAGE));
+			ad.setMessage(context.getString(R.string.error_text) + " " + b.getString(MESSAGE));
 			ad.setCancelable(true);
 			ad.show();
 			break;

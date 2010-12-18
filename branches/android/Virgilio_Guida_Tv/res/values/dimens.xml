@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="hour_border">2dp</dimen>
+    <dimen name="hour_padding">0dp</dimen>
+    <dimen name="hour_corner_radius">7dp</dimen>
+</resources>

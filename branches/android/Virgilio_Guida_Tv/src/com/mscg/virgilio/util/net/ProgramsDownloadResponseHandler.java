@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.mscg.virgilio.R;
 import com.mscg.virgilio.VirgilioGuidaTvDaySelection;
 import com.mscg.virgilio.handlers.DownloadProgressHandler;
 import com.mscg.virgilio.net.ProgramXMLParser;
@@ -25,10 +26,12 @@ import com.mscg.virgilio.util.io.PositionNotifierInputStream;
 public class ProgramsDownloadResponseHandler extends ContextAware implements AsynchResponseHandler<String> {
 
 	private Handler guiHandler;
+	private String ioErrorMessage;
 
 	public ProgramsDownloadResponseHandler(VirgilioGuidaTvDaySelection context, Handler guiHandler) {
 		super(context);
 		this.guiHandler = guiHandler;
+		ioErrorMessage = context.getString(R.string.load_failed).trim();
 	}
 
 	@Override
@@ -42,7 +45,7 @@ public class ProgramsDownloadResponseHandler extends ContextAware implements Asy
 	public void handleException(IOException e) {
 		Log.e(ProgramsDownloadResponseHandler.class.getCanonicalName(),
 				"Cannot download data from URL", e);
-		sendError(e.getMessage());
+		sendError(ioErrorMessage);
 	}
 
 	@Override
