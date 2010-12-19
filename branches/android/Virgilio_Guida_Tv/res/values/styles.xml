@@ -38,4 +38,14 @@
 	
 	<style name="programNameBoxStyle">
 	</style>
+	
+	<style name="cacheManagerText" parent="textStyle">
+	   <item name="android:paddingTop">5dp</item>
+	   <item name="android:paddingBottom">5dp</item>
+	   <item name="android:textStyle">bold</item>
+	</style>
+	
+	<style name="cacheManagerTextBold" parent="cacheManagerText">
+       <item name="android:textStyle">bold</item>
+    </style>
 </resources>

@@ -14,4 +14,6 @@ public interface ProgramsManagement {
 
 	public Programs savePrograms(Programs programs) throws SQLException;
 
+	public long getProgramsCount() throws SQLException;
+
 }

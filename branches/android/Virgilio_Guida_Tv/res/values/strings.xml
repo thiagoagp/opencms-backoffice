@@ -25,6 +25,14 @@
     <string name="programs_list_title">Virgilio Guida Tv - ${channelName} - Programmi</string>
     <string name="hours_format">HH:mm</string>
     
+    <string name="cache_management_title">Pagina di gestione cache</string>
+    <string name="memory_programs">Palinsesti nella cache in memoria:</string>
+    <string name="memory_channels">Canali nella cache in memoria:</string>
+    <string name="db_items">Palinsesti nel DB:</string>
+    <string name="buttons_remove_cache_elements">Svuota cache in memoria</string>
+    <string name="buttons_remove_older_db_elements">Rimuovi palinsesti vecchi dal DB</string>
+    <string name="buttons_remove_db_elements">Svuota DB</string>
+    
     <string name="cache_settings">Gestione cache</string>
     <string name="exit">Esci</string>
 </resources>

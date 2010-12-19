@@ -100,6 +100,49 @@ public class ProgramsDB implements Closeable, ProgramsManagement, ChannelsManage
 			"DROP TABLE " + TABLE_NAME;
 	}
 
+	private static class ProgramsDBHelper extends SQLiteOpenHelper {
+
+		public ProgramsDBHelper(Context context, String name, CursorFactory factory, int version) {
+			super(context, name, factory, version);
+		}
+
+		@Override
+		public void onCreate(SQLiteDatabase db) {
+			db.beginTransaction();
+			try {
+				db.execSQL(PROGRAMS_CONSTS.CREATE_QUERY);
+				db.execSQL(CHANNEL_CONSTS.CREATE_QUERY);
+				db.execSQL(CHANNELS_PROGRAMS_CONSTS.CREATE_QUERY);
+				db.execSQL(TV_PROGRAM_CONSTS.CREATE_QUERY);
+				db.setTransactionSuccessful();
+			} finally {
+				db.endTransaction();
+			}
+		}
+
+		@Override
+		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+			Log.w(ProgramsDBHelper.class.getCanonicalName(),
+				"Upgrading DB from version " + oldVersion + " to version " + newVersion + ". " +
+				"Old data will be lost.");
+
+			db.beginTransaction();
+			try {
+				db.execSQL(TV_PROGRAM_CONSTS.DROP_QUERY);
+				db.execSQL(CHANNELS_PROGRAMS_CONSTS.DROP_QUERY);
+				db.execSQL(CHANNEL_CONSTS.DROP_QUERY);
+				db.execSQL(PROGRAMS_CONSTS.DROP_QUERY);
+
+				db.setTransactionSuccessful();
+			} catch(Exception e) {
+				db.endTransaction();
+			}
+
+			onCreate(db);
+		}
+
+	}
+
 	public static class TV_PROGRAM_CONSTS {
 		public static final String TABLE_NAME = "tv_program";
 
@@ -140,9 +183,9 @@ public class ProgramsDB implements Closeable, ProgramsManagement, ChannelsManage
 			")";
 		public static final String DROP_QUERY =
 			"DROP TABLE " + TABLE_NAME;
-	}
+	};
 
-	private static final String DATABASE_NAME = "tv_programs.db";;
+	private static final String DATABASE_NAME = "tv_programs.db";
 
 	private static final int DATABASE_VERSION = 1;
 
@@ -184,6 +227,53 @@ public class ProgramsDB implements Closeable, ProgramsManagement, ChannelsManage
 			} catch(Exception e){}
 		}
 		return ret;
+	}
+
+	@Override
+	public Channel getChannel(long programsID, long channelID) {
+		return getChannel(programsID, channelID, false);
+	}
+
+	@Override
+	public Channel getChannel(long programsID, long channelID, boolean removeElement) {
+		Cursor listCur = null;
+		Channel curChann = null;
+		try {
+			listCur = db.rawQuery(
+					"SELECT c.*, t.* " +
+					"FROM " + CHANNELS_PROGRAMS_CONSTS.TABLE_NAME + " AS cp, " +
+						CHANNEL_CONSTS.TABLE_NAME + " AS c, " + TV_PROGRAM_CONSTS.TABLE_NAME + " AS t " +
+					"WHERE cp." + CHANNELS_PROGRAMS_CONSTS.PROGRAMS_COL + " = ? " +
+					"  AND cp." + CHANNELS_PROGRAMS_CONSTS.CHANNEL_COL + " = c." + CHANNEL_CONSTS.ID_COL + " " +
+					"  AND c." + CHANNEL_CONSTS.ID_COL + " = ? " +
+					"  AND t." + TV_PROGRAM_CONSTS.CHANNEL_COL + " = cp." + CHANNELS_PROGRAMS_CONSTS.ID_COL,
+					new String[]{Long.toString(programsID), Long.toString(channelID)});
+
+			if(listCur.getCount() != 0 && listCur.moveToFirst()) {
+				do {
+					if(curChann == null || curChann.getId() != channelID) {
+						curChann = new Channel(channelID,
+							listCur.getString(CHANNEL_CONSTS.STR_ID_COL_INDEX),
+							listCur.getString(CHANNEL_CONSTS.NAME_COL_INDEX));
+						String types = listCur.getString(CHANNEL_CONSTS.TYPES_COL_INDEX);
+						curChann.setTypes(Arrays.asList(types.split("\\|")));
+					}
+					TVProgram program = new TVProgram(
+						listCur.getLong(CHANNEL_CONSTS.COLUMN_COUNT + TV_PROGRAM_CONSTS.ID_COL_INDEX),
+						listCur.getString(CHANNEL_CONSTS.COLUMN_COUNT + TV_PROGRAM_CONSTS.STR_ID_COL_INDEX),
+						listCur.getString(CHANNEL_CONSTS.COLUMN_COUNT + TV_PROGRAM_CONSTS.NAME_COL_INDEX),
+						new Date(listCur.getLong(CHANNEL_CONSTS.COLUMN_COUNT + TV_PROGRAM_CONSTS.STARTTIME_COL_INDEX)),
+						new Date(listCur.getLong(CHANNEL_CONSTS.COLUMN_COUNT + TV_PROGRAM_CONSTS.ENDTIME_COL_INDEX)),
+						listCur.getString(CHANNEL_CONSTS.COLUMN_COUNT + TV_PROGRAM_CONSTS.CATEGORY_COL_INDEX));
+					curChann.addTVProgram(program);
+				} while(listCur.moveToNext());
+			}
+		} finally {
+			try {
+				listCur.close();
+			} catch(Exception e){}
+		}
+		return curChann;
 	}
 
 	/* (non-Javadoc)
@@ -231,6 +321,25 @@ public class ProgramsDB implements Closeable, ProgramsManagement, ChannelsManage
 			} catch(Exception e){}
 		}
 
+		return ret;
+	}
+
+	@Override
+	public long getProgramsCount() throws SQLException {
+		long ret = -1;
+		Cursor countCur = null;
+		try {
+			countCur = db.rawQuery(
+				"SELECT COUNT(*) " +
+				"FROM " + PROGRAMS_CONSTS.TABLE_NAME,
+				new String[]{});
+			if(countCur.getCount() > 0 && countCur.moveToFirst())
+				ret = countCur.getLong(0);
+		} finally {
+			try {
+				countCur.close();
+			} catch(Exception e){}
+		}
 		return ret;
 	}
 
@@ -328,6 +437,16 @@ public class ProgramsDB implements Closeable, ProgramsManagement, ChannelsManage
 		}
 	}
 
+	@Override
+	public boolean removeChannel(long programsID, long channelID) {
+		return false;
+	}
+
+	@Override
+	public void saveChannel(long programsID, long channelID, Channel channel) {
+
+	}
+
 	/* (non-Javadoc)
 	 * @see com.mscg.virgilio.database.ProgramsManagement#savePrograms(com.mscg.virgilio.programs.Programs)
 	 */
@@ -416,106 +535,6 @@ public class ProgramsDB implements Closeable, ProgramsManagement, ChannelsManage
 		}
 
 		return programs;
-	}
-
-	private static class ProgramsDBHelper extends SQLiteOpenHelper {
-
-		public ProgramsDBHelper(Context context, String name, CursorFactory factory, int version) {
-			super(context, name, factory, version);
-		}
-
-		@Override
-		public void onCreate(SQLiteDatabase db) {
-			db.beginTransaction();
-			try {
-				db.execSQL(PROGRAMS_CONSTS.CREATE_QUERY);
-				db.execSQL(CHANNEL_CONSTS.CREATE_QUERY);
-				db.execSQL(CHANNELS_PROGRAMS_CONSTS.CREATE_QUERY);
-				db.execSQL(TV_PROGRAM_CONSTS.CREATE_QUERY);
-				db.setTransactionSuccessful();
-			} finally {
-				db.endTransaction();
-			}
-		}
-
-		@Override
-		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			Log.w(ProgramsDBHelper.class.getCanonicalName(),
-				"Upgrading DB from version " + oldVersion + " to version " + newVersion + ". " +
-				"Old data will be lost.");
-
-			db.beginTransaction();
-			try {
-				db.execSQL(TV_PROGRAM_CONSTS.DROP_QUERY);
-				db.execSQL(CHANNELS_PROGRAMS_CONSTS.DROP_QUERY);
-				db.execSQL(CHANNEL_CONSTS.DROP_QUERY);
-				db.execSQL(PROGRAMS_CONSTS.DROP_QUERY);
-
-				db.setTransactionSuccessful();
-			} catch(Exception e) {
-				db.endTransaction();
-			}
-
-			onCreate(db);
-		}
-
-	}
-
-	@Override
-	public Channel getChannel(long programsID, long channelID) {
-		return getChannel(programsID, channelID, false);
-	}
-
-	@Override
-	public Channel getChannel(long programsID, long channelID, boolean removeElement) {
-		Cursor listCur = null;
-		Channel curChann = null;
-		try {
-			listCur = db.rawQuery(
-					"SELECT c.*, t.* " +
-					"FROM " + CHANNELS_PROGRAMS_CONSTS.TABLE_NAME + " AS cp, " +
-						CHANNEL_CONSTS.TABLE_NAME + " AS c, " + TV_PROGRAM_CONSTS.TABLE_NAME + " AS t " +
-					"WHERE cp." + CHANNELS_PROGRAMS_CONSTS.PROGRAMS_COL + " = ? " +
-					"  AND cp." + CHANNELS_PROGRAMS_CONSTS.CHANNEL_COL + " = c." + CHANNEL_CONSTS.ID_COL + " " +
-					"  AND c." + CHANNEL_CONSTS.ID_COL + " = ? " +
-					"  AND t." + TV_PROGRAM_CONSTS.CHANNEL_COL + " = cp." + CHANNELS_PROGRAMS_CONSTS.ID_COL,
-					new String[]{Long.toString(programsID), Long.toString(channelID)});
-
-			if(listCur.getCount() != 0 && listCur.moveToFirst()) {
-				do {
-					if(curChann == null || curChann.getId() != channelID) {
-						curChann = new Channel(channelID,
-							listCur.getString(CHANNEL_CONSTS.STR_ID_COL_INDEX),
-							listCur.getString(CHANNEL_CONSTS.NAME_COL_INDEX));
-						String types = listCur.getString(CHANNEL_CONSTS.TYPES_COL_INDEX);
-						curChann.setTypes(Arrays.asList(types.split("\\|")));
-					}
-					TVProgram program = new TVProgram(
-						listCur.getLong(CHANNEL_CONSTS.COLUMN_COUNT + TV_PROGRAM_CONSTS.ID_COL_INDEX),
-						listCur.getString(CHANNEL_CONSTS.COLUMN_COUNT + TV_PROGRAM_CONSTS.STR_ID_COL_INDEX),
-						listCur.getString(CHANNEL_CONSTS.COLUMN_COUNT + TV_PROGRAM_CONSTS.NAME_COL_INDEX),
-						new Date(listCur.getLong(CHANNEL_CONSTS.COLUMN_COUNT + TV_PROGRAM_CONSTS.STARTTIME_COL_INDEX)),
-						new Date(listCur.getLong(CHANNEL_CONSTS.COLUMN_COUNT + TV_PROGRAM_CONSTS.ENDTIME_COL_INDEX)),
-						listCur.getString(CHANNEL_CONSTS.COLUMN_COUNT + TV_PROGRAM_CONSTS.CATEGORY_COL_INDEX));
-					curChann.addTVProgram(program);
-				} while(listCur.moveToNext());
-			}
-		} finally {
-			try {
-				listCur.close();
-			} catch(Exception e){}
-		}
-		return curChann;
-	}
-
-	@Override
-	public boolean removeChannel(long programsID, long channelID) {
-		return false;
-	}
-
-	@Override
-	public void saveChannel(long programsID, long channelID, Channel channel) {
-
 	}
 
 }

@@ -20,22 +20,30 @@ public class CacheManager implements Closeable, ProgramsManagement, ChannelsMana
 
 	private static CacheManager instance;
 
-	private ProgramsDB db;
-	private LRUMap programsCache;
-	private LRUMap channelsCache;
-
 	public synchronized static CacheManager getInstance() {
 		return instance;
 	}
-
 	public synchronized static void init(Context context) {
 		instance = new CacheManager(context);
 	}
+	private ProgramsDB db;
+
+	private LRUMap programsCache;
+
+	private LRUMap channelsCache;
 
 	protected CacheManager(Context context) {
 		db = new ProgramsDB(context, true);
 		programsCache = new LRUMap(4);
 		channelsCache = new LRUMap(80);
+	}
+
+	public synchronized void clearChannelsCache() {
+		channelsCache.clear();
+	}
+
+	public synchronized void clearProgramsCache() {
+		programsCache.clear();
 	}
 
 	@Override
@@ -61,29 +69,6 @@ public class CacheManager implements Closeable, ProgramsManagement, ChannelsMana
 	}
 
 	@Override
-	public synchronized Programs getProgramsForDay(Date day) throws SQLException {
-		// search in cache
-		Programs ret = (Programs)programsCache.get(Util.adaptDate(day));
-		if(ret == null) {
-			// search in the DB
-			ret = db.getProgramsForDay(day);
-			saveProgramsInCache(ret);
-		}
-		return ret;
-	}
-
-	@Override
-	public synchronized Programs savePrograms(Programs programs) throws SQLException {
-		Programs ret = db.savePrograms(programs);
-		saveProgramsInCache(ret);
-		return ret;
-	}
-
-	protected void saveProgramsInCache(Programs programs) {
-		programsCache.put(Util.adaptDate(programs.getDate()), programs);
-	}
-
-	@Override
 	public synchronized Channel getChannel(long programsID, long channelID) {
 		return getChannel(programsID, channelID, false);
 	}
@@ -105,10 +90,33 @@ public class CacheManager implements Closeable, ProgramsManagement, ChannelsMana
 		return ret;
 	}
 
+	public synchronized int getChannelsCacheSize() {
+		if(channelsCache == null)
+			return 0;
+		return channelsCache.size();
+	}
+
+	public synchronized int getProgramsCacheSize() {
+		if(programsCache == null)
+			return 0;
+		return programsCache.size();
+	}
+
 	@Override
-	public synchronized void saveChannel(long programsID, long channelID, Channel channel) {
-		channelsCache.put(Long.toString(programsID) + channelID, channel);
-		db.saveChannel(programsID, channelID, channel);
+	public synchronized long getProgramsCount() throws SQLException {
+		return db.getProgramsCount();
+	}
+
+	@Override
+	public synchronized Programs getProgramsForDay(Date day) throws SQLException {
+		// search in cache
+		Programs ret = (Programs)programsCache.get(Util.adaptDate(day));
+		if(ret == null) {
+			// search in the DB
+			ret = db.getProgramsForDay(day);
+			saveProgramsInCache(ret);
+		}
+		return ret;
 	}
 
 	@Override
@@ -116,6 +124,23 @@ public class CacheManager implements Closeable, ProgramsManagement, ChannelsMana
 		db.removeChannel(programsID, channelID);
 		String key = Long.toString(programsID) + channelID;
 		return (channelsCache.remove(key) != null);
+	}
+
+	@Override
+	public synchronized void saveChannel(long programsID, long channelID, Channel channel) {
+		channelsCache.put(Long.toString(programsID) + channelID, channel);
+		db.saveChannel(programsID, channelID, channel);
+	}
+
+	@Override
+	public synchronized Programs savePrograms(Programs programs) throws SQLException {
+		Programs ret = db.savePrograms(programs);
+		saveProgramsInCache(ret);
+		return ret;
+	}
+
+	protected void saveProgramsInCache(Programs programs) {
+		programsCache.put(Util.adaptDate(programs.getDate()), programs);
 	}
 
 }

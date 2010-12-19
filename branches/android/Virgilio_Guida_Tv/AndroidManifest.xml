@@ -21,6 +21,10 @@
         <activity android:name=".VirgilioGuidaTvPrograms"
                   android:label="@string/programs_list_title_simple">
         </activity>
+        
+        <activity android:name=".CacheManagement"
+                  android:label="@string/cache_management_title">
+        </activity>
 
     </application>
 

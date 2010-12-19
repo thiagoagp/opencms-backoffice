@@ -13,17 +13,27 @@ public class GenericActivity extends Activity {
 	public static final int MENU_CACHE = Menu.FIRST;
 	public static final int MENU_EXIT = Menu.FIRST + 1;
 
+	protected MenuItem cache;
+	protected MenuItem exit;
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 
-		MenuItem cache = menu.add(MENU_GROUP, MENU_CACHE, Menu.NONE, R.string.cache_settings);
+		cache = menu.add(MENU_GROUP, MENU_CACHE, Menu.NONE, R.string.cache_settings);
 		cache.setIcon(android.R.drawable.ic_menu_save);
 		cache.setShortcut('0', 'c');
-		MenuItem exit = menu.add(MENU_GROUP, MENU_EXIT, Menu.NONE, R.string.exit);
+		exit = menu.add(MENU_GROUP, MENU_EXIT, Menu.NONE, R.string.exit);
 		exit.setIcon(android.R.drawable.ic_lock_power_off);
 		exit.setShortcut('1', 'e');
 
+		return true;
+	}
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		super.onPrepareOptionsMenu(menu);
+		cache.setEnabled(true);
 		return true;
 	}
 
@@ -32,6 +42,8 @@ public class GenericActivity extends Activity {
 		super.onOptionsItemSelected(item);
 		switch(item.getItemId()) {
 		case MENU_CACHE:
+			Intent cacheIntent = new Intent(this, CacheManagement.class);
+			startActivity(cacheIntent);
 			return true;
 		case MENU_EXIT:
 			Intent closeIntent = new Intent(this, VirgilioGuidaTvDaySelection.class);
