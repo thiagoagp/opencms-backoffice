@@ -8,10 +8,10 @@ import com.mscg.virgilio.programs.Programs;
 
 public interface ProgramsManagement {
 
-	public abstract boolean containsProgramsForDay(Date day) throws SQLException;
+	public boolean containsProgramsForDay(Date day) throws SQLException;
 
-	public abstract Programs getProgramsForDay(Date day) throws SQLException;
+	public Programs getProgramsForDay(Date day) throws SQLException;
 
-	public abstract Programs savePrograms(Programs programs) throws SQLException;
+	public Programs savePrograms(Programs programs) throws SQLException;
 
 }

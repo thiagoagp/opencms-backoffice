@@ -3,7 +3,6 @@ package com.mscg.virgilio;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,7 +18,7 @@ import com.mscg.virgilio.programs.Programs;
 import com.mscg.virgilio.util.CacheManager;
 import com.mscg.virgilio.util.Util;
 
-public class VirgilioGuidaTvChannelSelection extends Activity {
+public class VirgilioGuidaTvChannelSelection extends GenericActivity {
 
 	private TextView channelsListIntro;
 	private ListView channelsList;

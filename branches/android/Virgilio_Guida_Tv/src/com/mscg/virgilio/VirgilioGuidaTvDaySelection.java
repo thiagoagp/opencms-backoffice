@@ -5,9 +5,9 @@ import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.ArrayAdapter;
@@ -19,7 +19,7 @@ import com.mscg.virgilio.listener.DaySelectionClickListener;
 import com.mscg.virgilio.net.HttpClientManager;
 import com.mscg.virgilio.util.CacheManager;
 
-public class VirgilioGuidaTvDaySelection extends Activity {
+public class VirgilioGuidaTvDaySelection extends GenericActivity {
 
 	private Handler guiHandler;
 
@@ -41,6 +41,16 @@ public class VirgilioGuidaTvDaySelection extends Activity {
 
         progressDialogs = new HashMap<Integer, ProgressDialog>();
 
+        Intent intent = getIntent();
+        if(intent != null) {
+        	if((intent.getFlags() & Intent.FLAG_ACTIVITY_CLEAR_TOP) != 0 &&
+        		intent.getBooleanExtra(EXIT_PARAM, false)) {
+
+        		finish();
+        		return;
+        	}
+        }
+
         CacheManager.init(this);
         HttpClientManager.open();
         guiHandler = new DownloadProgressHandler(this);
@@ -55,6 +65,7 @@ public class VirgilioGuidaTvDaySelection extends Activity {
 
         daysList.setAdapter(daysListAdapter);
         daysList.setOnItemClickListener(new DaySelectionClickListener(this, guiHandler));
+
     }
 
 	@Override
@@ -93,8 +104,6 @@ public class VirgilioGuidaTvDaySelection extends Activity {
 		HttpClientManager.close();
 
 		IOUtils.closeQuietly(CacheManager.getInstance());
-
-		finish();
 	}
 
 	public void showDownloadDialog(int id) {

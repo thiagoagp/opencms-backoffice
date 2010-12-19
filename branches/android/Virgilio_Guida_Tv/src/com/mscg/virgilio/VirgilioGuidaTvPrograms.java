@@ -1,6 +1,5 @@
 package com.mscg.virgilio;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,7 +11,7 @@ import com.mscg.virgilio.programs.Channel;
 import com.mscg.virgilio.programs.TVProgram;
 import com.mscg.virgilio.util.CacheManager;
 
-public class VirgilioGuidaTvPrograms extends Activity {
+public class VirgilioGuidaTvPrograms extends GenericActivity {
 
 	public static final String CHANNEL = VirgilioGuidaTvPrograms.class.getCanonicalName() + ".channel";
 	public static final String PROGRAMS = VirgilioGuidaTvPrograms.class.getCanonicalName() + ".programs";
@@ -41,9 +40,8 @@ public class VirgilioGuidaTvPrograms extends Activity {
 				long programsID = intent.getLongExtra(PROGRAMS, -1);
 				long channelID = intent.getLongExtra(CHANNEL, -1);
 				if(programsID >= 0 && channelID >= 0) {
-					channel = CacheManager.getInstance().getChannel(programsID, channelID, true);
+					channel = CacheManager.getInstance().getChannel(programsID, channelID);
 					if(channel == null) {
-						// TODO: load from DB
 						throw new NullPointerException("Cannot find channel info");
 					}
 				}

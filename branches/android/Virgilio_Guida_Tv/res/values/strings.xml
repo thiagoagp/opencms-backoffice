@@ -24,4 +24,7 @@
     <string name="programs_list_title_simple">Virgilio Guida Tv - Programmi</string>
     <string name="programs_list_title">Virgilio Guida Tv - ${channelName} - Programmi</string>
     <string name="hours_format">HH:mm</string>
+    
+    <string name="cache_settings">Gestione cache</string>
+    <string name="exit">Esci</string>
 </resources>

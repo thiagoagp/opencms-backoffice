@@ -97,16 +97,23 @@ public class CacheManager implements Closeable, ProgramsManagement, ChannelsMana
 			if(removeElement)
 				removeChannel(programsID, channelID);
 		}
+		else {
+			ret = db.getChannel(programsID, channelID, removeElement);
+			if(ret != null && !removeElement)
+				channelsCache.put(key, ret);
+		}
 		return ret;
 	}
 
 	@Override
 	public synchronized void saveChannel(long programsID, long channelID, Channel channel) {
 		channelsCache.put(Long.toString(programsID) + channelID, channel);
+		db.saveChannel(programsID, channelID, channel);
 	}
 
 	@Override
 	public synchronized boolean removeChannel(long programsID, long channelID) {
+		db.removeChannel(programsID, channelID);
 		String key = Long.toString(programsID) + channelID;
 		return (channelsCache.remove(key) != null);
 	}
