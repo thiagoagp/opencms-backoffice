@@ -26,12 +26,6 @@ public class VirgilioGuidaTvPrograms extends GenericActivity {
 		setContentView(R.layout.program_selection);
 
 		programsListView = (ListView)findViewById(R.id.programsList);
-	}
-
-	@Override
-	protected void onStart() {
-		super.onStart();
-
 		Intent intent = getIntent();
 
 		if(intent != null) {
@@ -49,7 +43,7 @@ public class VirgilioGuidaTvPrograms extends GenericActivity {
 					throw new Exception("Invalid intent paramenters");
 			} catch(Exception e) {
 				Log.e(VirgilioGuidaTvPrograms.class.getCanonicalName(),
-					"Cannot get channel from intent", e);
+						"Cannot get channel from intent", e);
 			}
 
 			if(channel != null) {
@@ -58,11 +52,17 @@ public class VirgilioGuidaTvPrograms extends GenericActivity {
 				setTitle(title);
 
 				programsAdapter = new ProgramsListItemAdapter(this,
-					R.layout.program_list_layout,
-					channel.getTVPrograms());
+						R.layout.program_list_layout,
+						channel.getTVPrograms());
 				programsListView.setAdapter(programsAdapter);
 			}
 		}
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+
 	}
 
 	@Override

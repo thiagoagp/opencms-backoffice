@@ -34,19 +34,13 @@ public class VirgilioGuidaTvChannelSelection extends GenericActivity {
 		channelsList = (ListView) findViewById(R.id.channelsList);
 		channelsList.setOnItemClickListener(new ChannelSelectionClickListener(this));
 
-	}
-
-	@Override
-	protected void onStart() {
-		super.onStart();
-
 		Intent intent = getIntent();
 		Date day = null;
 		try {
 			day = (Date) intent.getSerializableExtra(DownloadProgressHandler.PROGRAMS);
 		} catch(Exception e) {
 			Log.e(VirgilioGuidaTvChannelSelection.class.getCanonicalName(),
-				"Cannot get programs date from intent", e);
+					"Cannot get programs date from intent", e);
 		}
 
 		if(day != null) {
@@ -68,6 +62,12 @@ public class VirgilioGuidaTvChannelSelection extends GenericActivity {
 		else {
 			channelsListIntro.setText(R.string.select_channel_fail);
 		}
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+
 	}
 
 	@Override
