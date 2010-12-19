@@ -3,7 +3,9 @@ package com.mscg.virgilio.database;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -438,8 +440,116 @@ public class ProgramsDB implements Closeable, ProgramsManagement, ChannelsManage
 	}
 
 	@Override
+	public void removeAllPrograms() throws SQLException {
+		Cursor progsCur = null;
+		db.beginTransaction();
+		try {
+			// get all programs
+			progsCur = db.query(
+				PROGRAMS_CONSTS.TABLE_NAME,
+				new String[]{PROGRAMS_CONSTS.ID_COL},
+				"1",
+				new String[] {},
+				null, null, null);
+
+			if(progsCur.getCount() > 0 && progsCur.moveToFirst()) {
+				// remove associated rows
+				do {
+					removePrograms(progsCur.getLong(0));
+				} while(progsCur.moveToNext());
+			}
+
+			// remove the programs
+			db.delete(
+					PROGRAMS_CONSTS.TABLE_NAME,
+					"1",
+					new String[] {});
+
+			db.setTransactionSuccessful();
+		} finally {
+			try {
+				progsCur.close();
+			} catch(Exception e){}
+
+			db.endTransaction();
+		}
+	}
+
+	@Override
 	public boolean removeChannel(long programsID, long channelID) {
 		return false;
+	}
+
+	@Override
+	public void removeOlderPrograms(int numDays) throws SQLException {
+		Calendar limit = new GregorianCalendar();
+		limit.add(Calendar.DAY_OF_MONTH, -numDays);
+
+		Cursor progsCur = null;
+		db.beginTransaction();
+		try {
+			// get all matching programs
+			progsCur = db.query(
+				PROGRAMS_CONSTS.TABLE_NAME,
+				new String[]{PROGRAMS_CONSTS.ID_COL},
+				PROGRAMS_CONSTS.DATE_COL + " < ?",
+				new String[] {Long.toString(limit.getTimeInMillis())},
+				null, null, null);
+
+			if(progsCur.getCount() > 0 && progsCur.moveToFirst()) {
+				// remove associated rows
+				do {
+					removePrograms(progsCur.getLong(0));
+				} while(progsCur.moveToNext());
+			}
+
+			// remove the matching programs
+			db.delete(
+					PROGRAMS_CONSTS.TABLE_NAME,
+					PROGRAMS_CONSTS.DATE_COL + " < ?",
+					new String[] {Long.toString(limit.getTimeInMillis())});
+
+			db.setTransactionSuccessful();
+		} finally {
+			try {
+				progsCur.close();
+			} catch(Exception e){}
+
+			db.endTransaction();
+		}
+	}
+
+	private void removePrograms(long programsID) throws SQLException {
+		// get all channel_to_programs rows with the provided programsID
+		Cursor ch2prCur = null;
+		try {
+			ch2prCur = db.query(
+				CHANNELS_PROGRAMS_CONSTS.TABLE_NAME,
+				new String[]{CHANNELS_PROGRAMS_CONSTS.ID_COL},
+				CHANNELS_PROGRAMS_CONSTS.PROGRAMS_COL + " = ?",
+				new String[] {Long.toString(programsID)}, null, null, null);
+
+			if(ch2prCur.getCount() > 0 && ch2prCur.moveToFirst()) {
+				do {
+					// remove the program associated to the actual channel_to_programs row
+					db.delete(
+						TV_PROGRAM_CONSTS.TABLE_NAME,
+						TV_PROGRAM_CONSTS.CHANNEL_COL + " = ?",
+						new String[]{Long.toString(ch2prCur.getLong(0))});
+				} while(ch2prCur.moveToNext());
+
+				// remove the channel_to_programs rows
+				db.delete(
+					CHANNELS_PROGRAMS_CONSTS.TABLE_NAME,
+					CHANNELS_PROGRAMS_CONSTS.PROGRAMS_COL + " = ?",
+					new String[] {Long.toString(programsID)});
+			}
+
+		} finally {
+			try {
+				ch2prCur.close();
+			} catch(Exception e){}
+		}
 	}
 
 	@Override

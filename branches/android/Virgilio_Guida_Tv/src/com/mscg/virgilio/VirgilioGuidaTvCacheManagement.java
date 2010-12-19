@@ -1,14 +1,16 @@
 package com.mscg.virgilio;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.mscg.virgilio.handlers.CacheManagementHandler;
 import com.mscg.virgilio.listener.CacheManagementButtonListener;
 import com.mscg.virgilio.util.CacheManager;
 
-public class CacheManagement extends GenericActivity {
+public class VirgilioGuidaTvCacheManagement extends GenericActivity {
 
 	private TextView memoryPrograms;
 	private TextView memoryChannels;
@@ -17,6 +19,8 @@ public class CacheManagement extends GenericActivity {
 	private Button emptyCacheButton;
 	private Button emptyOlderDBButton;
 	private Button emptyDBButton;
+
+	private Handler guiHandler;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +35,8 @@ public class CacheManagement extends GenericActivity {
 		emptyCacheButton = (Button)findViewById(R.id.emptyCache);
 		emptyOlderDBButton = (Button)findViewById(R.id.emptyOlderDB);
 		emptyDBButton = (Button)findViewById(R.id.emptyDB);
+
+		guiHandler = new CacheManagementHandler(this);
 
 		new CacheManagementButtonListener(this, emptyCacheButton, emptyOlderDBButton, emptyDBButton);
 	}
@@ -58,6 +64,10 @@ public class CacheManagement extends GenericActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+	}
+
+	public Handler getGuiHandler() {
+		return guiHandler;
 	}
 
 }

@@ -2,7 +2,12 @@ package com.mscg.virgilio.util;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.collections.map.LRUMap;
 import org.apache.commons.io.IOUtils;
@@ -120,10 +125,40 @@ public class CacheManager implements Closeable, ProgramsManagement, ChannelsMana
 	}
 
 	@Override
+	public synchronized void removeAllPrograms() throws SQLException {
+		clearChannelsCache();
+		clearProgramsCache();
+		db.removeAllPrograms();
+	}
+
+	@Override
 	public synchronized boolean removeChannel(long programsID, long channelID) {
 		db.removeChannel(programsID, channelID);
 		String key = Long.toString(programsID) + channelID;
 		return (channelsCache.remove(key) != null);
+	}
+
+	@Override
+	public synchronized void removeOlderPrograms(int numDays) throws SQLException {
+		Calendar limit = new GregorianCalendar();
+		limit.add(Calendar.DAY_OF_MONTH, -numDays);
+
+		// cycle through cache and remove older elements
+		boolean clearCache = false;
+		Set entries = programsCache.entrySet();
+		for(Iterator it = entries.iterator(); it.hasNext();) {
+			Map.Entry entry = (Map.Entry) it.next();
+			Programs programs = (Programs)entry.getValue();
+			if(programs.getDate().getTime() < limit.getTimeInMillis()) {
+				it.remove();
+				clearCache = true;
+			}
+		}
+		if(clearCache)
+			channelsCache.clear();
+
+		// remove also programs from DB
+		db.removeOlderPrograms(numDays);
 	}
 
 	@Override

@@ -16,4 +16,8 @@ public interface ProgramsManagement {
 
 	public long getProgramsCount() throws SQLException;
 
+	public void removeOlderPrograms(int numDays) throws SQLException;
+
+	public void removeAllPrograms() throws SQLException;
+
 }

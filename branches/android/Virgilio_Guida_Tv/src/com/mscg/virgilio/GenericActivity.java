@@ -1,6 +1,7 @@
 package com.mscg.virgilio;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,17 +43,22 @@ public class GenericActivity extends Activity {
 		super.onOptionsItemSelected(item);
 		switch(item.getItemId()) {
 		case MENU_CACHE:
-			Intent cacheIntent = new Intent(this, CacheManagement.class);
+			Intent cacheIntent = new Intent(this, VirgilioGuidaTvCacheManagement.class);
 			startActivity(cacheIntent);
 			return true;
 		case MENU_EXIT:
-			Intent closeIntent = new Intent(this, VirgilioGuidaTvDaySelection.class);
-			closeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			Intent closeIntent = getHomeIntent(this);
 			closeIntent.putExtra(EXIT_PARAM, true);
 			startActivity(closeIntent);
 			return true;
 		}
 		return false;
+	}
+
+	public static Intent getHomeIntent(Context context) {
+		Intent homeIntent = new Intent(context, VirgilioGuidaTvDaySelection.class);
+		homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		return homeIntent;
 	}
 
 }
