@@ -16,7 +16,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textFilterEnabled="true"
-        android:fastScrollEnabled="true"
-        android:listSelector="@drawable/list_element_selector" />
+        android:fastScrollEnabled="true" />
     
 </LinearLayout>

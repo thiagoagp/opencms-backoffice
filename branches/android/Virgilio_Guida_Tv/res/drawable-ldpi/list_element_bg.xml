@@ -7,7 +7,7 @@
         
     <item
         android:drawable="@drawable/list_element_gr_sel"
-        android:state_focused="true" />
+        android:state_selected="true" />
         
     <item
         android:drawable="@drawable/list_element_gr_sel"
@@ -16,5 +16,8 @@
     <item
         android:drawable="@drawable/list_element_gr_sel"
         android:state_pressed="true" />
+
+    <item
+        android:drawable="@drawable/list_element_gr" />
 
 </selector>

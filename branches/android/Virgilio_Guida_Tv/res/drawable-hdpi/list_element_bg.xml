@@ -6,15 +6,15 @@
     >
         
     <item
-        android:drawable="@color/transparent"
+        android:drawable="@drawable/list_element_gr_sel"
         android:state_selected="true" />
         
     <item
-        android:drawable="@color/transparent"
+        android:drawable="@drawable/list_element_gr_sel"
         android:state_selected="true" />
 
     <item
-        android:drawable="@color/transparent"
+        android:drawable="@drawable/list_element_gr_sel"
         android:state_pressed="true" />
 
     <item

@@ -15,7 +15,6 @@
     <ListView
         android:id="@+id/daysList"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:listSelector="@drawable/list_element_selector" />
+        android:layout_height="wrap_content" />
     
 </LinearLayout>
