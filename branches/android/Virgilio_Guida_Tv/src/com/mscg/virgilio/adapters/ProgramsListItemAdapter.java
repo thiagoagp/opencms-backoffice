@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.mscg.virgilio.R;
 import com.mscg.virgilio.programs.TVProgram;
+import com.mscg.virgilio.util.ProgramLinearLayout;
 
 public class ProgramsListItemAdapter extends GenericListItemAdapter<TVProgram> {
 
@@ -28,12 +29,13 @@ public class ProgramsListItemAdapter extends GenericListItemAdapter<TVProgram> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		View itemView = null;
+		ProgramLinearLayout itemView = null;
 
 		InfoHolder holder = null;
 
 		if(convertView == null) {
-			itemView = vi.inflate(textViewResourceId, null, true);
+			itemView = new ProgramLinearLayout(getContext());
+			vi.inflate(textViewResourceId, itemView, true);
 			holder = new InfoHolder();
 			holder.startHour = (TextView)itemView.findViewById(R.id.startHour);
 			holder.endHour = (TextView)itemView.findViewById(R.id.endHour);
@@ -42,11 +44,12 @@ public class ProgramsListItemAdapter extends GenericListItemAdapter<TVProgram> {
 			itemView.setTag(holder);
 		}
 		else {
-			itemView = convertView;
+			itemView = (ProgramLinearLayout)convertView;
 			holder = (InfoHolder)itemView.getTag();
 		}
 
 		TVProgram program = getItem(position);
+		itemView.setTvProgram(program);
 
 //		Calendar day = new GregorianCalendar();
 //		day.setTime(program.getChannel().getPrograms().getDate());

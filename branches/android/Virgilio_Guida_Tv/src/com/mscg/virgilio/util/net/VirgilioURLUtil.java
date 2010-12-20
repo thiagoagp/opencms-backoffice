@@ -7,6 +7,7 @@ import java.util.Map;
 public class VirgilioURLUtil {
 
 	public static final Map<Integer, String> URLS;
+	public static final String DETAILS_URL = "http://cinema-tv.virgilio.it/services/guida-tv/flash/flash-${programID}.xml";
 
 	static {
 		URLS = new LinkedHashMap<Integer, String>(7);

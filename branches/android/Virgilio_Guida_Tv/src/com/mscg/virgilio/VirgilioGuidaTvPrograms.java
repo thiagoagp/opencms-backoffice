@@ -2,11 +2,14 @@ package com.mscg.virgilio;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.mscg.virgilio.adapters.ProgramsListItemAdapter;
+import com.mscg.virgilio.handlers.ProgramsDetailsHandler;
+import com.mscg.virgilio.listener.ProgramSelectionClickListener;
 import com.mscg.virgilio.programs.Channel;
 import com.mscg.virgilio.programs.TVProgram;
 import com.mscg.virgilio.util.CacheManager;
@@ -18,6 +21,8 @@ public class VirgilioGuidaTvPrograms extends GenericActivity {
 
 	private ArrayAdapter<TVProgram> programsAdapter;
 	private ListView programsListView;
+
+	private Handler guiHandler;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +56,13 @@ public class VirgilioGuidaTvPrograms extends GenericActivity {
 				title = title.replace("${channelName}", channel.getName());
 				setTitle(title);
 
+				guiHandler = new ProgramsDetailsHandler(this);
+
 				programsAdapter = new ProgramsListItemAdapter(this,
 						R.layout.program_list_layout,
 						channel.getTVPrograms());
 				programsListView.setAdapter(programsAdapter);
+				programsListView.setOnItemClickListener(new ProgramSelectionClickListener(this, guiHandler));
 			}
 		}
 	}

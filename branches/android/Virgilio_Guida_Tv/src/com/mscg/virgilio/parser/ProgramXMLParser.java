@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.mscg.virgilio.net;
+package com.mscg.virgilio.parser;
 
 
 import java.io.IOException;

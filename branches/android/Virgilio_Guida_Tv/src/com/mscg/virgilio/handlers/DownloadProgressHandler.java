@@ -37,7 +37,7 @@ public class DownloadProgressHandler extends Handler {
 		int caseValue = b.getInt(TYPE);
 		switch(caseValue) {
 		case UPDATE_PROGRESS:
-			if(context.getProgressDialog().isIndeterminate()) {
+			if(context.getProgressDialog() == null || context.getProgressDialog().isIndeterminate()) {
 				if(context.getProgressDialog() != null)
 					context.getProgressDialog().dismiss();
 				context.showDownloadDialog(UPDATE_PROGRESS);

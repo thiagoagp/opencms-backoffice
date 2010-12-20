@@ -17,19 +17,16 @@ import com.mscg.virgilio.handlers.DownloadProgressHandler;
 import com.mscg.virgilio.net.HttpClientManager;
 import com.mscg.virgilio.programs.Programs;
 import com.mscg.virgilio.util.CacheManager;
-import com.mscg.virgilio.util.ContextAware;
+import com.mscg.virgilio.util.ContextAndHandlerAware;
 import com.mscg.virgilio.util.DayLinearLayout;
 import com.mscg.virgilio.util.net.AsynchResponseHandler;
 import com.mscg.virgilio.util.net.ProgramsDownloadResponseHandler;
 import com.mscg.virgilio.util.net.VirgilioURLUtil;
 
-public class DaySelectionClickListener extends ContextAware implements OnItemClickListener {
-
-	private Handler guiHandler;
+public class DaySelectionClickListener extends ContextAndHandlerAware implements OnItemClickListener {
 
 	public DaySelectionClickListener(VirgilioGuidaTvDaySelection context, Handler guiHandler) {
-		super(context);
-		this.guiHandler = guiHandler;
+		super(context, guiHandler);
 	}
 
 	@Override
