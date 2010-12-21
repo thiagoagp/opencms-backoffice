@@ -34,6 +34,8 @@
     <string name="buttons_remove_db_elements">Svuota DB</string>
     <string name="deleting_data">Eliminazione dei dati in corso...</string>
     
+    <string name="details_title">Dettagli programma</string>
+    
     <string name="close">Chiudi</string>
     
     <string name="cache_settings">Gestione cache</string>

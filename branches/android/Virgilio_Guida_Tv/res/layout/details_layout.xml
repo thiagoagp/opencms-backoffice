@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="@dimen/details_height"
+    android:padding="@dimen/details_padding" >
+    
+    <TextView android:id="@+id/detailTitle"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              style="@style/detailsTitle" />
+              
+    <ScrollView android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                style="@style/detailsScroll" >
+        
+        <TextView android:id="@+id/detailText"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  style="@style/detailsText" />
+                  
+    </ScrollView>
+    
+    <LinearLayout android:orientation="horizontal"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:paddingBottom="@dimen/details_scroll_paddingBottom" >
+        
+        <TextView android:id="@+id/detailStart"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1"
+                  style="@style/detailsText" />
+                  
+	    <ImageView android:id="@+id/detailIcon"
+	               android:layout_width="wrap_content"
+	               android:layout_height="wrap_content" />
+	               
+        <TextView android:id="@+id/detailEnd"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1"
+                  style="@style/detailsText" />
+    </LinearLayout>
+    
+    
+    <Button android:id="@+id/detailsCancel"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+    
+</LinearLayout>

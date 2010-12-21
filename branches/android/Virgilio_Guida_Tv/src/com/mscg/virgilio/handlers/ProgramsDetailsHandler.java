@@ -1,15 +1,18 @@
 package com.mscg.virgilio.handlers;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.mscg.virgilio.R;
 import com.mscg.virgilio.VirgilioGuidaTvPrograms;
+import com.mscg.virgilio.listener.DetailsButtonsListener;
 import com.mscg.virgilio.programs.ProgramDetails;
 
 public class ProgramsDetailsHandler extends Handler {
@@ -22,6 +25,7 @@ public class ProgramsDetailsHandler extends Handler {
 	private String analyzingData;
 	private String errorTitle;
 	private String errorText;
+	private String detailsTitle;
 	private String closeText;
 
 	public ProgramsDetailsHandler(VirgilioGuidaTvPrograms context) {
@@ -32,12 +36,14 @@ public class ProgramsDetailsHandler extends Handler {
 		analyzingData = context.getString(R.string.analyzing_data);
 		errorTitle = context.getString(R.string.error_title);
 		errorText = context.getString(R.string.error_text);
+		detailsTitle = context.getString(R.string.details_title);
 		closeText = context.getString(R.string.close);
 	}
 
 	@Override
 	public void handleMessage(Message msg) {
 		AlertDialog.Builder ad = null;
+		Dialog d = null;
 		Bundle b = msg.getData();
 		int caseValue = b.getInt(DownloadProgressHandler.TYPE);
 
@@ -70,19 +76,49 @@ public class ProgramsDetailsHandler extends Handler {
 		case DownloadProgressHandler.END_PARSE:
 			if(progressDialog != null)
 				progressDialog.dismiss();
-			ad = new AlertDialog.Builder(context);
-			ad.setTitle(programDetails.getTitle());
-			ad.setMessage(programDetails.getDescription());
-			ad.setNegativeButton(closeText, new OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					dialog.dismiss();
-				}
-			});
-			ad.setCancelable(true);
-			ad.show();
+
+			d = new Dialog(context);
+			d.setContentView(R.layout.details_layout);
+			d.setTitle(detailsTitle);
+
+			((TextView)d.findViewById(R.id.detailTitle)).setText(programDetails.getTitle());
+			((TextView)d.findViewById(R.id.detailText)).setText(programDetails.getDescription());
+
+			Button button = (Button)d.findViewById(R.id.detailsCancel);
+			button.setText(closeText);
+			button.setOnClickListener(new DetailsButtonsListener(d));
+
+			ImageView image = (ImageView)d.findViewById(R.id.detailIcon);
+			switch(programDetails.getLevel()) {
+			case ProgramDetails.GREEN:
+				image.setImageResource(R.drawable.green);
+				break;
+			case ProgramDetails.YELLOW:
+				image.setImageResource(R.drawable.yellow);
+				break;
+			case ProgramDetails.RED:
+				image.setImageResource(R.drawable.red);
+				break;
+			}
+
+			d.setCancelable(true);
+			d.show();
+
+//			ad = new AlertDialog.Builder(context);
+//			ad.setTitle(programDetails.getTitle());
+//			ad.setMessage(programDetails.getDescription());
+//			ad.setNegativeButton(closeText, new OnClickListener() {
+//				@Override
+//				public void onClick(DialogInterface dialog, int which) {
+//					dialog.dismiss();
+//				}
+//			});
+//			ad.setCancelable(true);
+//			ad.show();
 			break;
 		case DownloadProgressHandler.ERROR:
+			if(progressDialog != null)
+				progressDialog.dismiss();
 			ad = new AlertDialog.Builder(context);
 			ad.setTitle(errorTitle);
 			ad.setMessage(errorText + " " + b.getString(DownloadProgressHandler.MESSAGE));

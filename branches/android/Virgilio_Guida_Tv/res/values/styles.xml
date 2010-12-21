@@ -39,6 +39,18 @@
 	<style name="programNameBoxStyle">
 	</style>
 	
+	<style name="detailsScroll">
+	   <item name="android:paddingTop">@dimen/details_scroll_paddingTop</item>
+	   <item name="android:paddingBottom">@dimen/details_scroll_paddingBottom</item>
+	</style>
+	
+	<style name="detailsText" parent="textStyle">
+    </style>
+
+	<style name="detailsTitle" parent="detailsText">
+	   <item name="android:textStyle">bold</item>
+    </style>
+	
 	<style name="cacheManagerText" parent="textStyle">
 	   <item name="android:paddingTop">5dp</item>
 	   <item name="android:paddingBottom">5dp</item>
