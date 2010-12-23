@@ -36,6 +36,9 @@
     
     <string name="details_title">Dettagli programma</string>
     
+    <string name="program_start">Inizio:</string>
+    <string name="program_end">Fine:</string>
+    
     <string name="close">Chiudi</string>
     
     <string name="cache_settings">Gestione cache</string>

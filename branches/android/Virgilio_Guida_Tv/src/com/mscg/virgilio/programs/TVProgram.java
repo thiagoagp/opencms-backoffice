@@ -24,6 +24,7 @@ public class TVProgram implements Serializable {
 	private Date endTime;
 	private String category;
 	private Channel channel;
+	private ProgramDetails programDetails;
 
 	public TVProgram(long id, String strId, String name, Date startTime, Date endTime, String category) {
 		setId(id);
@@ -36,78 +37,6 @@ public class TVProgram implements Serializable {
 
 	public TVProgram(String strId, String name, Date startTime, Date endTime, String category) {
 		this(-1, strId, name, startTime, endTime, category);
-	}
-
-	public String getCategory() {
-		return category;
-	}
-
-	public Channel getChannel() {
-		return channel;
-	}
-
-	public Date getEndTime() {
-		return endTime;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public Date getStartTime() {
-		return startTime;
-	}
-
-	public String getStrId() {
-		return strId;
-	}
-
-	public void setCategory(String category) {
-		this.category = category;
-	}
-
-	public void setChannel(Channel channel) {
-		this.channel = channel;
-	}
-
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
-	}
-
-	public void setStrId(String strId) {
-		this.strId = strId;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((category == null) ? 0 : category.hashCode());
-		result = prime * result + ((channel == null) ? 0 : channel.hashCode());
-		result = prime * result + ((endTime == null) ? 0 : endTime.hashCode());
-		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result
-				+ ((startTime == null) ? 0 : startTime.hashCode());
-		result = prime * result + ((strId == null) ? 0 : strId.hashCode());
-		return result;
 	}
 
 	@Override
@@ -152,6 +81,86 @@ public class TVProgram implements Serializable {
 		} else if (!strId.equals(other.strId))
 			return false;
 		return true;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public Channel getChannel() {
+		return channel;
+	}
+
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public ProgramDetails getProgramDetails() {
+		return programDetails;
+	}
+
+	public Date getStartTime() {
+		return startTime;
+	}
+
+	public String getStrId() {
+		return strId;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((category == null) ? 0 : category.hashCode());
+		result = prime * result + ((channel == null) ? 0 : channel.hashCode());
+		result = prime * result + ((endTime == null) ? 0 : endTime.hashCode());
+		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result
+				+ ((startTime == null) ? 0 : startTime.hashCode());
+		result = prime * result + ((strId == null) ? 0 : strId.hashCode());
+		return result;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public void setChannel(Channel channel) {
+		this.channel = channel;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setProgramDetails(ProgramDetails programDetails) {
+		this.programDetails = programDetails;
+	}
+
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
+
+	public void setStrId(String strId) {
+		this.strId = strId;
 	}
 
 	@Override

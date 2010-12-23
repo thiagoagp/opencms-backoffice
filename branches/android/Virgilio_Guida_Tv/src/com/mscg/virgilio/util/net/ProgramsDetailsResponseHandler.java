@@ -18,6 +18,7 @@ import com.mscg.virgilio.R;
 import com.mscg.virgilio.handlers.DownloadProgressHandler;
 import com.mscg.virgilio.handlers.ProgramsDetailsHandler;
 import com.mscg.virgilio.parser.ProgramDetailsXMLParser;
+import com.mscg.virgilio.programs.TVProgram;
 import com.mscg.virgilio.util.ContextAndHandlerAware;
 import com.mscg.virgilio.util.io.InputStreamDataReadListener;
 import com.mscg.virgilio.util.io.PositionNotifierInputStream;
@@ -25,9 +26,11 @@ import com.mscg.virgilio.util.io.PositionNotifierInputStream;
 public class ProgramsDetailsResponseHandler extends ContextAndHandlerAware implements AsynchResponseHandler<String> {
 
 	private String ioErrorMessage;
+	private TVProgram program;
 
-	public ProgramsDetailsResponseHandler(Context context, Handler guiHandler) {
+	public ProgramsDetailsResponseHandler(Context context, Handler guiHandler, TVProgram program) {
 		super(context, guiHandler);
+		this.program = program;
 		ioErrorMessage = context.getString(R.string.load_failed).trim();
 	}
 
@@ -94,8 +97,9 @@ public class ProgramsDetailsResponseHandler extends ContextAndHandlerAware imple
 			is = new PositionNotifierInputStream(entity.getContent(), totalSize, listener);
 
 			ProgramDetailsXMLParser parser = new ProgramDetailsXMLParser(is);
+			program.setProgramDetails(parser.getProgramDetails());
 			if(guiHandler instanceof ProgramsDetailsHandler)
-				((ProgramsDetailsHandler)guiHandler).setProgramDetails(parser.getProgramDetails());
+				((ProgramsDetailsHandler)guiHandler).setProgram(program);
 
 			msg = guiHandler.obtainMessage();
             b = new Bundle();

@@ -1,11 +1,14 @@
 package com.mscg.virgilio.handlers;
 
+import java.text.SimpleDateFormat;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,19 +17,21 @@ import com.mscg.virgilio.R;
 import com.mscg.virgilio.VirgilioGuidaTvPrograms;
 import com.mscg.virgilio.listener.DetailsButtonsListener;
 import com.mscg.virgilio.programs.ProgramDetails;
+import com.mscg.virgilio.programs.TVProgram;
 
 public class ProgramsDetailsHandler extends Handler {
 
 	private VirgilioGuidaTvPrograms context;
-	private ProgramDetails programDetails;
+	private TVProgram program;
 	private ProgressDialog progressDialog;
 
 	private String contactingServer;
 	private String analyzingData;
 	private String errorTitle;
 	private String errorText;
-	private String detailsTitle;
+	//private String detailsTitle;
 	private String closeText;
+	private SimpleDateFormat hourFormatter;
 
 	public ProgramsDetailsHandler(VirgilioGuidaTvPrograms context) {
 		super();
@@ -36,8 +41,9 @@ public class ProgramsDetailsHandler extends Handler {
 		analyzingData = context.getString(R.string.analyzing_data);
 		errorTitle = context.getString(R.string.error_title);
 		errorText = context.getString(R.string.error_text);
-		detailsTitle = context.getString(R.string.details_title);
+		//detailsTitle = context.getString(R.string.details_title);
 		closeText = context.getString(R.string.close);
+		hourFormatter = new SimpleDateFormat(context.getString(R.string.hours_format));
 	}
 
 	@Override
@@ -78,18 +84,24 @@ public class ProgramsDetailsHandler extends Handler {
 				progressDialog.dismiss();
 
 			d = new Dialog(context);
+			d.requestWindowFeature(Window.FEATURE_NO_TITLE);
 			d.setContentView(R.layout.details_layout);
-			d.setTitle(detailsTitle);
+			//d.setTitle(detailsTitle);
 
-			((TextView)d.findViewById(R.id.detailTitle)).setText(programDetails.getTitle());
-			((TextView)d.findViewById(R.id.detailText)).setText(programDetails.getDescription());
+			ProgramDetails details = program.getProgramDetails();
+
+			((TextView)d.findViewById(R.id.detailTitle)).setText(details.getTitle());
+			((TextView)d.findViewById(R.id.detailText)).setText(details.getDescription());
+
+			((TextView)d.findViewById(R.id.detailStart)).setText(hourFormatter.format(program.getStartTime()));
+			((TextView)d.findViewById(R.id.detailEnd)).setText(hourFormatter.format(program.getEndTime()));
 
 			Button button = (Button)d.findViewById(R.id.detailsCancel);
 			button.setText(closeText);
 			button.setOnClickListener(new DetailsButtonsListener(d));
 
 			ImageView image = (ImageView)d.findViewById(R.id.detailIcon);
-			switch(programDetails.getLevel()) {
+			switch(details.getLevel()) {
 			case ProgramDetails.GREEN:
 				image.setImageResource(R.drawable.green);
 				break;
@@ -128,12 +140,12 @@ public class ProgramsDetailsHandler extends Handler {
 		}
 	}
 
-	public synchronized ProgramDetails getProgramDetails() {
-		return programDetails;
+	public synchronized TVProgram getProgram() {
+		return program;
 	}
 
-	public synchronized void setProgramDetails(ProgramDetails programDetails) {
-		this.programDetails = programDetails;
+	public synchronized void setProgram(TVProgram program) {
+		this.program = program;
 	}
 
 }

@@ -8,6 +8,7 @@
     <TextView android:id="@+id/detailTitle"
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
+              android:gravity="center_horizontal"
               style="@style/detailsTitle" />
               
     <ScrollView android:layout_width="fill_parent"
@@ -27,21 +28,45 @@
                   android:layout_height="wrap_content"
                   android:paddingBottom="@dimen/details_scroll_paddingBottom" >
         
-        <TextView android:id="@+id/detailStart"
+        <LinearLayout android:orientation="vertical"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:layout_weight="1"
-                  style="@style/detailsText" />
-                  
+                  android:layout_weight="1">
+            
+            <TextView android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:text="@string/program_start"
+                      android:gravity="center_horizontal"
+                      style="@style/detailsText"/>      
+	        <TextView android:id="@+id/detailStart"
+	                  android:layout_width="fill_parent"
+	                  android:layout_height="wrap_content"
+	                  android:gravity="center_horizontal"
+	                  style="@style/detailsTitle" />
+	                  
+        </LinearLayout>
+        
 	    <ImageView android:id="@+id/detailIcon"
 	               android:layout_width="wrap_content"
 	               android:layout_height="wrap_content" />
 	               
-        <TextView android:id="@+id/detailEnd"
+	    <LinearLayout android:orientation="vertical"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:layout_weight="1"
-                  style="@style/detailsText" />
+                  android:layout_weight="1">
+        
+            <TextView android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:text="@string/program_end"
+                      android:gravity="center_horizontal"
+                      style="@style/detailsText" />
+	        <TextView android:id="@+id/detailEnd"
+	                  android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:gravity="center_horizontal"
+                      style="@style/detailsTitle" />
+        
+        </LinearLayout>
     </LinearLayout>
     
     
