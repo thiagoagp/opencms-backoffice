@@ -141,4 +141,9 @@ public class ProgramsDownloadResponseHandler extends ContextAndHandlerAware impl
         guiHandler.sendMessage(msg);
 	}
 
+	@Override
+	public void handleResponseObject(String response) {
+
+	}
+
 }

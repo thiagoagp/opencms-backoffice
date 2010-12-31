@@ -128,4 +128,9 @@ public class ProgramsDetailsResponseHandler extends ContextAndHandlerAware imple
         guiHandler.sendMessage(msg);
 	}
 
+	@Override
+	public void handleResponseObject(String response) {
+
+	}
+
 }
