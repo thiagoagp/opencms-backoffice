@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.mscg.net.handler.AsynchResponseHandler;
 import com.mscg.virgilio.R;
 import com.mscg.virgilio.VirgilioGuidaTvDaySelection;
 import com.mscg.virgilio.handlers.DownloadProgressHandler;

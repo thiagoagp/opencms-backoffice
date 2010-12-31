@@ -13,10 +13,10 @@ import android.os.Handler;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.mscg.net.HttpClientManager;
 import com.mscg.virgilio.adapters.DayListItemAdapter;
 import com.mscg.virgilio.handlers.DownloadProgressHandler;
 import com.mscg.virgilio.listener.DaySelectionClickListener;
-import com.mscg.virgilio.net.HttpClientManager;
 import com.mscg.virgilio.util.CacheManager;
 
 public class VirgilioGuidaTvDaySelection extends GenericActivity {

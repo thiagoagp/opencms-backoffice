@@ -12,14 +12,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
+import com.mscg.net.HttpClientManager;
+import com.mscg.net.handler.AsynchResponseHandler;
 import com.mscg.virgilio.VirgilioGuidaTvDaySelection;
 import com.mscg.virgilio.handlers.DownloadProgressHandler;
-import com.mscg.virgilio.net.HttpClientManager;
 import com.mscg.virgilio.programs.Programs;
 import com.mscg.virgilio.util.CacheManager;
 import com.mscg.virgilio.util.ContextAndHandlerAware;
 import com.mscg.virgilio.util.DayLinearLayout;
-import com.mscg.virgilio.util.net.AsynchResponseHandler;
 import com.mscg.virgilio.util.net.ProgramsDownloadResponseHandler;
 import com.mscg.virgilio.util.net.VirgilioURLUtil;
 
