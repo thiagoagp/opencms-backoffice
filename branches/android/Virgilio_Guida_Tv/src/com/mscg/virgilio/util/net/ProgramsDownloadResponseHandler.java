@@ -13,6 +13,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.mscg.io.InputStreamDataReadListener;
+import com.mscg.io.PositionNotifierInputStream;
 import com.mscg.net.handler.AsynchResponseHandler;
 import com.mscg.virgilio.R;
 import com.mscg.virgilio.VirgilioGuidaTvDaySelection;
@@ -21,8 +23,6 @@ import com.mscg.virgilio.parser.ProgramXMLParser;
 import com.mscg.virgilio.programs.Programs;
 import com.mscg.virgilio.util.CacheManager;
 import com.mscg.virgilio.util.ContextAndHandlerAware;
-import com.mscg.virgilio.util.io.InputStreamDataReadListener;
-import com.mscg.virgilio.util.io.PositionNotifierInputStream;
 
 public class ProgramsDownloadResponseHandler extends ContextAndHandlerAware implements AsynchResponseHandler<String> {
 

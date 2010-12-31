@@ -14,6 +14,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.mscg.io.InputStreamDataReadListener;
+import com.mscg.io.PositionNotifierInputStream;
 import com.mscg.net.handler.AsynchResponseHandler;
 import com.mscg.virgilio.R;
 import com.mscg.virgilio.handlers.DownloadProgressHandler;
@@ -21,8 +23,6 @@ import com.mscg.virgilio.handlers.ProgramsDetailsHandler;
 import com.mscg.virgilio.parser.ProgramDetailsXMLParser;
 import com.mscg.virgilio.programs.TVProgram;
 import com.mscg.virgilio.util.ContextAndHandlerAware;
-import com.mscg.virgilio.util.io.InputStreamDataReadListener;
-import com.mscg.virgilio.util.io.PositionNotifierInputStream;
 
 public class ProgramsDetailsResponseHandler extends ContextAndHandlerAware implements AsynchResponseHandler<String> {
 
