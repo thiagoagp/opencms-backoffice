@@ -66,12 +66,12 @@ public class HttpClientManager {
 		return httpClient.execute(request, handler);
 	}
 
-	private static class AsynchMethodExecutor implements Runnable {
+	private static class AsynchMethodExecutor<T> implements Runnable {
 		private HttpUriRequest request;
 		private Map<String, String> headers;
-		private AsynchResponseHandler<?> handler;
+		private AsynchResponseHandler<T> handler;
 
-		public AsynchMethodExecutor(HttpUriRequest request, Map<String, String> headers, AsynchResponseHandler<?> handler) {
+		public AsynchMethodExecutor(HttpUriRequest request, Map<String, String> headers, AsynchResponseHandler<T> handler) {
 			super();
 			this.request = request;
 			this.headers = headers;
@@ -81,7 +81,8 @@ public class HttpClientManager {
 		@Override
 		public void run() {
 			try {
-				executeSynchMethod(request, headers, handler);
+				T response = (T)executeSynchMethod(request, headers, handler);
+				handler.handleResponseObject(response);
 			} catch (ClientProtocolException e) {
 				handler.handleException(e);
 			} catch (IOException e) {
