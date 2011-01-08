@@ -41,12 +41,14 @@ public class HttpClientManager {
 		httpClient = null;
 	}
 
-	public static void executeAsynchMethod(HttpUriRequest request, AsynchResponseHandler<?> handler) {
-		executeAsynchMethod(request, null, handler);
+	public static Thread executeAsynchMethod(HttpUriRequest request, AsynchResponseHandler<?> handler) {
+		return executeAsynchMethod(request, null, handler);
 	}
 
-	public static void executeAsynchMethod(HttpUriRequest request, Map<String, String> headers, AsynchResponseHandler<?> handler) {
-		new Thread(new AsynchMethodExecutor(request, headers, handler)).start();
+	public static Thread executeAsynchMethod(HttpUriRequest request, Map<String, String> headers, AsynchResponseHandler<?> handler) {
+		Thread executor = new Thread(new AsynchMethodExecutor(request, headers, handler));
+		executor.start();
+		return executor;
 	}
 
 	public static Object executeSynchMethod(HttpUriRequest request, SyncResponseHandler<?> handler) throws ClientProtocolException, IOException {
