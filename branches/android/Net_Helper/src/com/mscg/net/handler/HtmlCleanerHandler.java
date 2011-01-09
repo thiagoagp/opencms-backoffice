@@ -4,6 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
@@ -105,23 +108,30 @@ public abstract class HtmlCleanerHandler implements AsynchResponseHandler<TagNod
 				if(encoding == null)
 					encoding = HTTP.UTF_8;
 
-				InputStream is = null;
+				InputStream is = entity.getContent();
+				String contentEncoding = null;
+				try {
+					contentEncoding = response.getLastHeader(HTTP.CONTENT_ENCODING).getValue().toLowerCase();
+				} catch(Exception e){}
+				if("gzip".equals(contentEncoding)) {
+					is = new GZIPInputStream(is);
+				}
+
 				if(beforeCaching(response) || localCache) {
 					byte buffer[] = null;
+					ByteArrayOutputStream bos = null;
+					if(responseSize > 0)
+						bos = new ByteArrayOutputStream((int)responseSize);
+					else
+						bos = new ByteArrayOutputStream();
 					if(forceEncode) {
-//						IOUtils.copy(new InputStreamReader(is, encoding), new OutputStreamWriter(bos, encoding));
-//						String tmp = new String(bos.toByteArray(), encoding);
-						String tmp = EntityUtils.toString(entity, encoding);
+						IOUtils.copy(new InputStreamReader(is, encoding), new OutputStreamWriter(bos, encoding));
+						String tmp = new String(bos.toByteArray(), encoding);
+//						String tmp = EntityUtils.toString(entity, encoding);
 						encoding = HTTP.UTF_8;
 						buffer = tmp.getBytes(encoding);
 					}
 					else {
-						ByteArrayOutputStream bos = null;
-						if(responseSize > 0)
-							bos = new ByteArrayOutputStream((int)responseSize);
-						else
-							bos = new ByteArrayOutputStream();
-						is = entity.getContent();
 						if(dataListener != null)
 							is = new PositionNotifierInputStream(is, entity.getContentLength(), dataListener);
 
@@ -135,7 +145,6 @@ public abstract class HtmlCleanerHandler implements AsynchResponseHandler<TagNod
 					afterCaching();
 				}
 				else {
-					is = entity.getContent();
 					if(dataListener != null)
 						is = new PositionNotifierInputStream(is, responseSize, dataListener);
 				}
