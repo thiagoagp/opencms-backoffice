@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="v_holder">
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+    
+    <style name="v_spacer">
+        <item name="android:layout_height">20dp</item>
+    </style>
+
+    <style name="textStyle">
+	   <item name="android:textSize">16dp</item>
+	   <item name="android:textColor">#FFFFFF</item>
+    </style>
+    
+    <style name="smallText" parent="textStyle">
+        <item name="android:textSize">10dp</item>
+    </style>
+    
+    <style name="speedText" parent="smallText">
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:layout_width">95dp</item>
+    </style>
+    
+    <style name="speedLayoutBg">
+        <item name="android:layout_height">8px</item>
+        <item name="android:background">#FF99CCFF</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+    
+    <style name="login_wrapper">
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingLeft">13dp</item>
+        <item name="android:paddingRight">13dp</item>
+        <item name="android:paddingBottom">12dp</item>
+    </style>
+    
+    <style name="top_list_image">
+        <item name="android:paddingRight">3dp</item>
+    </style>
+    
+    <style name="top_list">
+        <item name="android:paddingLeft">2dp</item>
+        <item name="android:paddingBottom">5dp</item>
+    </style>
+    
+    <style name="top_list_first" parent="top_list">
+        <item name="android:paddingTop">5dp</item>
+    </style>
+</resources>
