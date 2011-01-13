@@ -1,5 +1,9 @@
 package com.mscg.emule;
 
+import java.net.URLEncoder;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,6 +37,12 @@ public abstract class GenericSpeedInfoActivity extends Activity {
 
 	protected MenuItem cache;
 	protected MenuItem exit;
+
+	protected Map<String, String> parameters;
+
+	public GenericSpeedInfoActivity() {
+		parameters = new LinkedHashMap<String, String>();
+	}
 
 	public abstract int getActivityLayout();
 
@@ -122,5 +132,25 @@ public abstract class GenericSpeedInfoActivity extends Activity {
 	}
 
 	public abstract boolean update();
+
+	public Map<String, String> getParameters() {
+		return parameters;
+	}
+
+	public void setParameters(Map<String, String> parameters) {
+		this.parameters = parameters;
+	}
+
+	protected String getParametersString() {
+		StringBuffer ret = new StringBuffer();
+		for(Map.Entry<String, String> entry : parameters.entrySet()) {
+			try {
+				ret.append("&" +
+					URLEncoder.encode(entry.getValue(), "UTF-8") + "=" +
+					URLEncoder.encode(entry.getKey(), "UTF-8"));
+			} catch(Exception e){}
+		}
+		return ret.toString();
+	}
 
 }

@@ -58,6 +58,7 @@ public class Login extends Activity {
 	@Override
 	protected void onRestart() {
 		super.onRestart();
+		passwordBox.setText("");
 		if(Util.isNotEmptyOrWhiteSpaceOnly(urlBox.getText().toString()))
 			passwordBox.setSelected(true);
 	}

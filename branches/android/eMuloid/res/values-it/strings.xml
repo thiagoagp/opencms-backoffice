@@ -27,5 +27,7 @@
     <string name="server_disconnected">Disconnesso</string>
     
     <string name="download_list">Trasferimenti</string>
-
+    <string name="download_list_categories">Categorie</string>
+    <string name="download_list_downloads">Download</string>
+    
 </resources>

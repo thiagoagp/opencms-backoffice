@@ -4,6 +4,7 @@ import org.apache.http.client.methods.HttpGet;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Spinner;
 
 import com.mscg.emule.handler.TransfersHandler;
 import com.mscg.emule.net.handler.TransfersNetHandler;
@@ -13,9 +14,9 @@ import com.mscg.net.HttpClientManager;
 
 public class DownloadList extends GenericSpeedInfoActivity {
 
-	private int updateTime;
-
 	private UpdateThread updateThread;
+
+	private Spinner categoriesSpinner;
 
 	@Override
 	public int getActivityLayout() {
@@ -28,8 +29,13 @@ public class DownloadList extends GenericSpeedInfoActivity {
 
 		handler = new TransfersHandler(this);
 
+		categoriesSpinner = (Spinner)findViewById(R.id.download_categories);
+
 		updateThread = new UpdateThread();
-		updateTime = Preferences.getInstance().getInt(Preferences.UPDATE_TIME, 30000);
+	}
+
+	public Spinner getCategoriesSpinner() {
+		return categoriesSpinner;
 	}
 
 	@Override
@@ -69,13 +75,15 @@ public class DownloadList extends GenericSpeedInfoActivity {
 				try {
 					while(!interrupted()) {
 						Preferences prefs = Preferences.getInstance();
+						if(!parameters.containsKey("cat"))
+							parameters.put("cat", "0");
 						String url = prefs.getString(Preferences.WEBSERVER_URL, "") +
-							"?ses=" + prefs.getInt(Preferences.SESSION_ID, -1) + "&w=transfer";
+							"?ses=" + prefs.getInt(Preferences.SESSION_ID, -1) + "&w=transfer" + getParametersString();
 						HttpGet get = new HttpGet(url);
 						httpThread = HttpClientManager.executeAsynchMethod(get,
 							new TransfersNetHandler(handler, Util.getHtmlCleanerStandardProperties()));
 						httpThread.join();
-						sleep(updateTime);
+						sleep(Preferences.getInstance().getInt(Preferences.UPDATE_TIME, 120000));
 					}
 				} catch(InterruptedException e) {
 					Log.i(this.getClass().getCanonicalName(), "Thread is interrupted: " + e.getMessage());

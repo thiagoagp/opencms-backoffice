@@ -25,6 +25,10 @@ public class Constants {
 			public static final int UPDATE_UPLOAD_SPEED = 5;
 		}
 
+		public static class Transfers {
+			public static final int UPDATE_CATEGORIES = 6;
+		}
+
 		public static final int UPDATE_TERMINATED = 1000;
 
 		public static final int ERROR = -1;
