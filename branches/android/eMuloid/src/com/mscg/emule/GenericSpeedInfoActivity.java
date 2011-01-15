@@ -146,8 +146,8 @@ public abstract class GenericSpeedInfoActivity extends Activity {
 		for(Map.Entry<String, String> entry : parameters.entrySet()) {
 			try {
 				ret.append("&" +
-					URLEncoder.encode(entry.getValue(), "UTF-8") + "=" +
-					URLEncoder.encode(entry.getKey(), "UTF-8"));
+					URLEncoder.encode(entry.getKey(), "UTF-8") + "=" +
+					URLEncoder.encode(entry.getValue(), "UTF-8"));
 			} catch(Exception e){}
 		}
 		return ret.toString();

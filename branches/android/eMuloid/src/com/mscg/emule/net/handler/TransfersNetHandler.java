@@ -18,12 +18,11 @@ import android.util.Log;
 
 import com.mscg.emule.bean.CategoryBean;
 import com.mscg.emule.util.Constants;
-import com.mscg.emule.util.Util;
 import com.mscg.io.InputStreamDataReadListener;
 
 public class TransfersNetHandler extends GenericSpeedInfoNetHandler {
 
-	private Pattern categoryIDPattern = Pattern.compile(".*cat=(\\d+).*");
+	private Pattern categoryIDPattern = Pattern.compile(".*cat=(-?\\d+).*");
 
 	public TransfersNetHandler(Handler handler, boolean localCache) {
 		super(handler, localCache);
@@ -44,21 +43,22 @@ public class TransfersNetHandler extends GenericSpeedInfoNetHandler {
 	@Override
 	public void handleDocument(Document document) throws Exception {
 		Message m = null;
-		// read the avalible categories
+		// read the available categories
 		NodeList downloadBoxTmp = (NodeList)xpath.evaluate("//table[./tbody/tr/td[@class='smallheader']][position()=1]/tbody", document, XPathConstants.NODESET);
 		Node downloadBox = downloadBoxTmp.item(0);
 		NodeList menuItems = (NodeList)xpath.evaluate("tr[position()=1]/td[position()=1]//div[@class='menuitems']//a", downloadBox, XPathConstants.NODESET);
+		NodeList catLinks = (NodeList)xpath.evaluate("tr[position()=1]/td[position()=1]//div[@class='menuitems']//a/@href", downloadBox, XPathConstants.NODESET);
+		NodeList catSelStatuses = (NodeList)xpath.evaluate("tr[position()=1]/td[position()=1]//div[@class='menuitems']//a/img/@src", downloadBox, XPathConstants.NODESET);
 		List<CategoryBean> categories = new LinkedList<CategoryBean>();
 		for(int i = 0, l = menuItems.getLength(); i < l; i++) {
 			Node menuItem = menuItems.item(i);
-
-			String catLink = (String)xpath.evaluate("@href", menuItem, XPathConstants.STRING);
+			String catLink = catLinks.item(i).getTextContent();
 			Matcher catIDMatcher = categoryIDPattern.matcher(catLink);
 			if(catIDMatcher.find()) {
 				try {
 					Integer catID = Integer.parseInt(catIDMatcher.group(1));
-					String catName = Util.getNodesText((NodeList)xpath.evaluate("text()", menuItem, XPathConstants.NODESET)).trim();
-					String catSelTxt = (String)xpath.evaluate("img/@src", menuItem, XPathConstants.STRING);
+					String catName = menuItem.getTextContent().trim();//Util.getNodesText((NodeList)xpath.evaluate("text()", menuItem, XPathConstants.NODESET)).trim();
+					String catSelTxt = catSelStatuses.item(i).getTextContent();
 
 					categories.add(new CategoryBean(
 						catName, catID, catSelTxt.contains("checked.gif")));
