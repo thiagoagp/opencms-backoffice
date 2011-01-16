@@ -1,5 +1,7 @@
 package com.mscg.emule.util;
 
+import java.lang.reflect.Field;
+
 import org.htmlcleaner.CleanerProperties;
 import org.w3c.dom.NodeList;
 
@@ -7,8 +9,11 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.mscg.emule.Login;
+import com.mscg.emule.R;
 
 public class Util {
+
+	private static Field drawableFields[] = R.drawable.class.getDeclaredFields();
 
 	private Util() {
 
@@ -51,6 +56,15 @@ public class Util {
 			ret.append(nodes.item(i).getTextContent());
 		}
 		return ret.toString();
+	}
+
+	public static Object getDrawableIDByName(String drawableName) throws IllegalArgumentException,	                                                                     IllegalAccessException {
+		for(Field field : drawableFields) {
+			if(field.getName().equals(drawableName)) {
+				return field.get(null);
+			}
+		}
+		return null;
 	}
 
 }

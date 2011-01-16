@@ -30,7 +30,7 @@ public class TransfersHandler extends GenericSpeedInfoHandler {
 
 			PreventingUpdateItemSelectionListener selListener = (PreventingUpdateItemSelectionListener)category.getOnItemSelectedListener();
 			if(selListener != null)
-				selListener.setUpdatesToIgnore(1);
+				selListener.setUpdatesToIgnore(category.getAdapter() != null ? 2 : 1);
 
 			categoryAdapter = new ArrayAdapter<CategoryBean>(
 				context,
@@ -46,6 +46,7 @@ public class TransfersHandler extends GenericSpeedInfoHandler {
 				index++;
 			}
 			category.setSelection(index);
+			((ArrayAdapter)categoryAdapter).notifyDataSetChanged();
 
 			break;
 		default:

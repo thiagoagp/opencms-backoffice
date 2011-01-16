@@ -56,11 +56,11 @@ public class Login extends Activity {
     }
 
 	@Override
-	protected void onRestart() {
-		super.onRestart();
+	protected void onResume() {
+		super.onResume();
 		passwordBox.setText("");
 		if(Util.isNotEmptyOrWhiteSpaceOnly(urlBox.getText().toString()))
-			passwordBox.setSelected(true);
+			passwordBox.requestFocus();
 	}
 
 	@Override

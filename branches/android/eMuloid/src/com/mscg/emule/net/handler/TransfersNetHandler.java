@@ -71,6 +71,12 @@ public class TransfersNetHandler extends GenericSpeedInfoNetHandler {
 		m.obj = categories;
 		handler.sendMessage(m);
 
+		// read the downloads lines
+		NodeList downloadLines = (NodeList)xpath.evaluate("tr[./td[starts-with(./@class, 'down-line')]]", downloadBox, XPathConstants.NODESET);
+		for(int i = 0, l = downloadLines.getLength(); i < l; i++) {
+			Node downloadLine = downloadLines.item(i);
+		}
+
 		m = handler.obtainMessage(Constants.Messages.UPDATE_TERMINATED);
 		handler.sendMessage(m);
 	}
