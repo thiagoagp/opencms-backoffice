@@ -45,6 +45,7 @@
     
     <style name="top_list">
         <item name="android:paddingLeft">2dp</item>
+        <item name="android:paddingRight">2dp</item>
         <item name="android:paddingBottom">5dp</item>
     </style>
     
@@ -79,5 +80,36 @@
     <style name="category_dropdown" parent="smallText">
         <item name="android:paddingLeft">16px</item>
         <item name="android:paddingRight">7px</item>
+    </style>
+    
+    <style name="downloadList">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">170dp</item>
+    </style>
+    
+    <style name="downloadListItem">
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:background">#FF005784</item>
+    </style>
+    
+    <style name="downloadListItemInner">
+        <item name="android:paddingTop">3dp</item>
+        <item name="android:paddingBottom">3dp</item>
+        <item name="android:background">#FF1F76A5</item>
+    </style>
+    
+    <style name="downloadInfo">
+        <item name="android:paddingLeft">2dp</item>
+    </style>
+
+    <style name="downloadText" parent="smallText">
+        <item name="android:paddingLeft">2dp</item>
+    </style>
+    
+    <style name="downloadInfoText" parent="smallText">
+        <item name="android:layout_weight">1</item>
+        <item name="android:paddingLeft">2dp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 </resources>

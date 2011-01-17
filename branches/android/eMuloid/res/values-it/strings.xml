@@ -29,5 +29,8 @@
     <string name="download_list">Trasferimenti</string>
     <string name="download_list_categories">Categorie</string>
     <string name="download_list_downloads">Download</string>
+    <string name="download_size">Dim.:</string>
+    <string name="download_completed">Comp.:</string>
+    <string name="download_speed">Vel.:</string>
     
 </resources>

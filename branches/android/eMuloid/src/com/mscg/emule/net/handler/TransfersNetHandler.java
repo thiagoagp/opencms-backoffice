@@ -17,7 +17,10 @@ import android.os.Message;
 import android.util.Log;
 
 import com.mscg.emule.bean.CategoryBean;
+import com.mscg.emule.bean.DownloadBean;
+import com.mscg.emule.bean.DownloadState;
 import com.mscg.emule.util.Constants;
+import com.mscg.emule.util.Util;
 import com.mscg.io.InputStreamDataReadListener;
 
 public class TransfersNetHandler extends GenericSpeedInfoNetHandler {
@@ -72,10 +75,63 @@ public class TransfersNetHandler extends GenericSpeedInfoNetHandler {
 		handler.sendMessage(m);
 
 		// read the downloads lines
-		NodeList downloadLines = (NodeList)xpath.evaluate("tr[./td[starts-with(./@class, 'down-line')]]", downloadBox, XPathConstants.NODESET);
-		for(int i = 0, l = downloadLines.getLength(); i < l; i++) {
-			Node downloadLine = downloadLines.item(i);
+		List<DownloadBean> downloads = new LinkedList<DownloadBean>();
+		NodeList downloadStatuses = (NodeList)xpath.evaluate(
+			"tr[./td[starts-with(./@class, 'down-line')]]/td[position()=1]/@class", downloadBox, XPathConstants.NODESET);
+		NodeList downloadResTypes = (NodeList)xpath.evaluate(
+			"tr[./td[starts-with(./@class, 'down-line')]]/td[position()=1]/table/tbody/tr/td[position()=3]/@background", downloadBox, XPathConstants.NODESET);
+		NodeList downloadCommentStatuses = (NodeList)xpath.evaluate(
+			"tr[./td[starts-with(./@class, 'down-line')]]/td[position()=1]/table/tbody/tr/td[position()=3]/img/@src", downloadBox, XPathConstants.NODESET);
+		NodeList downloadInfoContainer = (NodeList)xpath.evaluate(
+				"tr[./td[starts-with(./@class, 'down-line')]]/td[position()=1]/table/tbody/tr/td[position()=5]", downloadBox, XPathConstants.NODESET);
+		NodeList downloadInfoSet = (NodeList)xpath.evaluate(
+				"tr[./td[starts-with(./@class, 'down-line')]]/td[position()=1]/table/tbody/tr/td[position()=5]/div", downloadBox, XPathConstants.NODESET);
+		NodeList downloadSizes = (NodeList)xpath.evaluate("tr[./td[starts-with(./@class, 'down-line')]]/td[position()=2]/text()", downloadBox, XPathConstants.NODESET);
+		NodeList downloadCompletes = (NodeList)xpath.evaluate("tr[./td[starts-with(./@class, 'down-line')]]/td[position()=3]/text()", downloadBox, XPathConstants.NODESET);
+		NodeList downloadSpeeds = (NodeList)xpath.evaluate("tr[./td[starts-with(./@class, 'down-line')]]/td[position()=5]/text()", downloadBox, XPathConstants.NODESET);
+		NodeList downloadSources = (NodeList)xpath.evaluate("tr[./td[starts-with(./@class, 'down-line')]]/td[position()=6]/text()", downloadBox, XPathConstants.NODESET);
+		NodeList downloadPriorities = (NodeList)xpath.evaluate("tr[./td[starts-with(./@class, 'down-line')]]/td[position()=7]/a/text()", downloadBox, XPathConstants.NODESET);
+		NodeList downloadCategories = (NodeList)xpath.evaluate(
+			"tr[./td[starts-with(./@class, 'down-line')]]/td[position()=8]/div[@class='menuitems']/a[./img[@src='checked.gif']]/text()", downloadBox, XPathConstants.NODESET);
+
+
+		for(int i = 0, l = downloadStatuses.getLength(); i < l; i++) {
+			String status = downloadStatuses.item(i).getTextContent();
+			status = status.substring("down-line-".length());
+			int index = status.lastIndexOf("-");
+			if(index > 0)
+				status = status.substring(0, index);
+
+			String resType = downloadResTypes.item(i).getTextContent();
+			resType = resType.substring(0, resType.lastIndexOf("."));
+			Integer resTypeID = Util.getDrawableIDByName(resType);
+
+			String commentStatus = downloadCommentStatuses.item(i).getTextContent();
+			commentStatus = commentStatus.substring(0, commentStatus.lastIndexOf("."));
+			Integer commentStatusID = Util.getDrawableIDByName(commentStatus);
+
+			String title = Util.getNodesText((NodeList)xpath.evaluate("text()", downloadInfoContainer.item(i), XPathConstants.NODESET));
+
+			List<String> downloadInfoStr = new LinkedList<String>();
+			NodeList downloadInfos = (NodeList)xpath.evaluate("text()", downloadInfoSet.item(i), XPathConstants.NODESET);
+			for(int j = 0, l2 = downloadInfos.getLength(); j < l2; j++) {
+				downloadInfoStr.add(downloadInfos.item(j).getTextContent());
+			}
+
+			String size = downloadSizes.item(i).getTextContent().trim();
+			String completed = downloadCompletes.item(i).getTextContent().trim();
+			String speed = downloadSpeeds.item(i).getTextContent().trim();
+			String sources = downloadSources.item(i).getTextContent().trim();
+			String priority = downloadPriorities.item(i).getTextContent().trim();
+			String category = downloadCategories.item(i).getTextContent().trim();
+
+			downloads.add(new DownloadBean(
+				DownloadState.fromString(status), title, resTypeID, commentStatusID,
+				downloadInfoStr, size, completed, speed, sources, priority, category
+			));
 		}
+		m = handler.obtainMessage(Constants.Messages.Transfers.UPDATE_DOWNLOADS, 0, 0, downloads);
+		handler.sendMessage(m);
 
 		m = handler.obtainMessage(Constants.Messages.UPDATE_TERMINATED);
 		handler.sendMessage(m);

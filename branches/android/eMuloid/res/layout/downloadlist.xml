@@ -35,5 +35,8 @@
                      style="@style/download_list_categories" />
                      
         </LinearLayout>
+        
+        <ListView android:id="@+id/downloads"
+                  style="@style/downloadList" />
     </LinearLayout> 
 </LinearLayout>

@@ -4,6 +4,7 @@ import org.apache.http.client.methods.HttpGet;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.mscg.emule.handler.TransfersHandler;
@@ -18,6 +19,7 @@ public class DownloadList extends GenericSpeedInfoActivity {
 	private UpdateThread updateThread;
 
 	private Spinner categoriesSpinner;
+	private ListView downloads;
 
 	@Override
 	public int getActivityLayout() {
@@ -33,6 +35,8 @@ public class DownloadList extends GenericSpeedInfoActivity {
 		categoriesSpinner = (Spinner)findViewById(R.id.download_categories);
 		categoriesSpinner.setOnItemSelectedListener(new CategorySelectionListener(this));
 
+		downloads = (ListView)findViewById(R.id.downloads);
+
 		updateThread = new UpdateThread();
 	}
 
@@ -44,6 +48,10 @@ public class DownloadList extends GenericSpeedInfoActivity {
 
 	public Spinner getCategoriesSpinner() {
 		return categoriesSpinner;
+	}
+
+	public ListView getDownloads() {
+		return downloads;
 	}
 
 	@Override

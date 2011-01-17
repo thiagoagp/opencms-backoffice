@@ -27,6 +27,7 @@ public class Constants {
 
 		public static class Transfers {
 			public static final int UPDATE_CATEGORIES = 6;
+			public static final int UPDATE_DOWNLOADS = 7;
 		}
 
 		public static final int UPDATE_TERMINATED = 1000;

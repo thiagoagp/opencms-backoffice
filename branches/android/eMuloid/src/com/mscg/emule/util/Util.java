@@ -58,10 +58,10 @@ public class Util {
 		return ret.toString();
 	}
 
-	public static Object getDrawableIDByName(String drawableName) throws IllegalArgumentException,	                                                                     IllegalAccessException {
+	public static Integer getDrawableIDByName(String drawableName) throws IllegalArgumentException,	                                                                     IllegalAccessException {
 		for(Field field : drawableFields) {
 			if(field.getName().equals(drawableName)) {
-				return field.get(null);
+				return (Integer)field.get(null);
 			}
 		}
 		return null;

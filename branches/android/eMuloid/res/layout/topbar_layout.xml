@@ -25,49 +25,56 @@
                   android:layout_width="fill_parent"
                   android:layout_height="fill_parent"
                   android:background="@drawable/topbar">
+        
         <LinearLayout android:orientation="vertical"
                       android:layout_width="fill_parent"
                       android:layout_height="fill_parent"
                       android:background="@drawable/top_bg">
             
-            <!-- Server status -->          
             <LinearLayout android:orientation="horizontal"
                           android:layout_width="fill_parent"
                           android:layout_height="wrap_content"
                           style="@style/top_list_first">
-                          
-                <ImageView android:id="@+id/server_status_img"
-                           android:layout_width="wrap_content"
-                           android:layout_height="wrap_content"
-                           android:src="@drawable/server_disconnected"
-                           style="@style/top_list_image" />
-                <TextView android:id="@+id/server_name"
-                          android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:layout_weight="1"
-                          android:text="@string/server_disconnected"
-                          style="@style/smallText" />
-                          
+	            
+	            <!-- Server status -->          
+	            <LinearLayout android:orientation="horizontal"
+	                          android:layout_width="wrap_content"
+	                          android:layout_height="wrap_content"
+	                          android:layout_weight="1">
+	                          
+	                <ImageView android:id="@+id/server_status_img"
+	                           android:layout_width="wrap_content"
+	                           android:layout_height="wrap_content"
+	                           android:src="@drawable/server_disconnected"
+	                           style="@style/top_list_image" />
+	                <TextView android:id="@+id/server_name"
+	                          android:layout_width="wrap_content"
+	                          android:layout_height="wrap_content"
+	                          android:layout_weight="1"
+	                          android:text="@string/server_disconnected"
+	                          style="@style/smallText" />
+	                          
+	            </LinearLayout>
+	            
+	            <!-- Kad status -->
+	            <LinearLayout android:orientation="horizontal"
+	                          android:layout_width="wrap_content"
+	                          android:layout_height="wrap_content">
+	                          
+	                <ImageView android:layout_width="wrap_content"
+	                           android:layout_height="wrap_content"
+	                           android:src="@drawable/h_kad_small"
+	                           style="@style/top_list_image" />
+	                <TextView android:id="@+id/kad_status"
+	                          android:layout_width="wrap_content"
+	                          android:layout_height="wrap_content"
+	                          android:layout_weight="1"
+	                          android:text="@string/server_disconnected"
+	                          style="@style/smallText" />
+	                          
+	            </LinearLayout>
             </LinearLayout>
             
-            <!-- Kad status -->
-            <LinearLayout android:orientation="horizontal"
-                          android:layout_width="fill_parent"
-                          android:layout_height="wrap_content"
-                          style="@style/top_list">
-                          
-                <ImageView android:layout_width="wrap_content"
-                           android:layout_height="wrap_content"
-                           android:src="@drawable/h_kad_small"
-                           style="@style/top_list_image" />
-                <TextView android:id="@+id/kad_status"
-                          android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:layout_weight="1"
-                          android:text="@string/server_disconnected"
-                          style="@style/smallText" />
-                          
-            </LinearLayout>
             
             <!-- Download speed -->
             <LinearLayout android:orientation="horizontal"
