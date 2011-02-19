@@ -30,4 +30,16 @@
 		<nature>com.android.ide.eclipse.adt.AndroidNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>Net Helper - HTML cleaner_src</name>
+			<type>2</type>
+			<locationURI>_android_Net_Helper_HTML_cleaner_8c7c6683/src</locationURI>
+		</link>
+		<link>
+			<name>Net Helper_src</name>
+			<type>2</type>
+			<locationURI>_android_Net_Helper_1ccefbd1/src</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>
