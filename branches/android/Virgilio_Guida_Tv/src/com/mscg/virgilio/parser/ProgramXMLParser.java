@@ -7,7 +7,6 @@ package com.mscg.virgilio.parser;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -25,16 +24,13 @@ import android.util.Log;
 import com.mscg.virgilio.programs.Channel;
 import com.mscg.virgilio.programs.Programs;
 import com.mscg.virgilio.programs.TVProgram;
+import com.mscg.virgilio.util.Util;
 
 /**
  * @author Giuseppe Miscione
  *
  */
 public class ProgramXMLParser {
-
-	private static final SimpleDateFormat programsDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-	private static final SimpleDateFormat programsLastUpdateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	private static final SimpleDateFormat programTimeFormat = new SimpleDateFormat("HH:mm");
 
 	private Programs programs;
 
@@ -92,7 +88,7 @@ public class ProgramXMLParser {
 				String dateStr = attributes.getValue("date");
 				Date date = null;
 				try {
-					date = programsDateFormat.parse(dateStr);
+					date = Util.programsDateFormat.parse(dateStr);
 				} catch (ParseException e) {}
 				programs.setDate(date);
 
@@ -100,7 +96,7 @@ public class ProgramXMLParser {
 				String lastUpdateStr = attributes.getValue("last-update");
 				Date lastUpdate = null;
 				try {
-					lastUpdate = programsLastUpdateFormat.parse(lastUpdateStr);
+					lastUpdate = Util.programsLastUpdateFormat.parse(lastUpdateStr);
 				} catch (ParseException e) {}
 				programs.setLastUpdate(lastUpdate);
 			}
@@ -113,11 +109,11 @@ public class ProgramXMLParser {
 			else if("pr".equals(qName)) {
 				Date startTime = null;
 				try {
-					startTime = programTimeFormat.parse(attributes.getValue("st"));
+					startTime = Util.programTimeFormat.parse(attributes.getValue("st"));
 				} catch(ParseException e){}
 				Date endTime = null;
 				try {
-					endTime = programTimeFormat.parse(attributes.getValue("et"));
+					endTime = Util.programTimeFormat.parse(attributes.getValue("et"));
 				} catch(ParseException e){}
 				TVProgram tvpr = new TVProgram(
 					attributes.getValue("id"),
