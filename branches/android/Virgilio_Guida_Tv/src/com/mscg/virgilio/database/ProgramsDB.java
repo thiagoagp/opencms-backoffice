@@ -12,8 +12,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.mscg.virgilio.programs.Channel;
@@ -324,6 +324,17 @@ public class ProgramsDB implements Closeable, ProgramsManagement, ChannelsManage
 		}
 
 		return ret;
+	}
+
+	@Override
+	public Cursor getPrograms() throws SQLException {
+		Cursor cur = db.rawQuery(
+			"SELECT " + PROGRAMS_CONSTS.ID_COL + " AS _id, " + PROGRAMS_CONSTS.DATE_COL + ", " +
+				PROGRAMS_CONSTS.LAST_UPDATE_COL + " " +
+			"FROM " + PROGRAMS_CONSTS.TABLE_NAME + " " +
+			"ORDER BY " + PROGRAMS_CONSTS.DATE_COL + " DESC",
+			new String[]{});
+		return cur;
 	}
 
 	@Override

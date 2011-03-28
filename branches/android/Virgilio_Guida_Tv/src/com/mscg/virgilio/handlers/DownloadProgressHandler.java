@@ -6,9 +6,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
+import com.mscg.virgilio.GenericActivity;
 import com.mscg.virgilio.R;
 import com.mscg.virgilio.VirgilioGuidaTvChannelSelection;
-import com.mscg.virgilio.VirgilioGuidaTvDaySelection;
 import com.mscg.virgilio.programs.Programs;
 
 public class DownloadProgressHandler extends Handler {
@@ -25,9 +25,9 @@ public class DownloadProgressHandler extends Handler {
 	public static final int END_SAVE = 5;
 	public static final int ERROR = 6;
 
-	private VirgilioGuidaTvDaySelection context;
+	private GenericActivity context;
 
-	public DownloadProgressHandler(VirgilioGuidaTvDaySelection context) {
+	public DownloadProgressHandler(GenericActivity context) {
 		this.context = context;
 	}
 

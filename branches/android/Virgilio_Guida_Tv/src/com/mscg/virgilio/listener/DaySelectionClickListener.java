@@ -14,6 +14,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.mscg.net.HttpClientManager;
 import com.mscg.net.handler.AsynchResponseHandler;
+import com.mscg.virgilio.GenericActivity;
 import com.mscg.virgilio.VirgilioGuidaTvDaySelection;
 import com.mscg.virgilio.handlers.DownloadProgressHandler;
 import com.mscg.virgilio.programs.Programs;
@@ -51,7 +52,7 @@ public class DaySelectionClickListener extends ContextAndHandlerAware implements
 			HttpClientManager.executeAsynchMethod(get, responseHandler);
 		}
 		else {
-			((VirgilioGuidaTvDaySelection)context).showDownloadDialog(DownloadProgressHandler.START_LOAD);
+			((GenericActivity)context).showDownloadDialog(DownloadProgressHandler.START_LOAD);
 			new Thread() {
 
 				@Override

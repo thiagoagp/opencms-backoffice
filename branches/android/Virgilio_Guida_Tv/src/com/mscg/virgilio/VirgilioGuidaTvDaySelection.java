@@ -1,11 +1,7 @@
 package com.mscg.virgilio;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.commons.io.IOUtils;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,21 +21,12 @@ public class VirgilioGuidaTvDaySelection extends GenericActivity {
 
 	private ListView daysList;
 	private ArrayAdapter<Integer> daysListAdapter;
-	private Map<Integer, ProgressDialog> progressDialogs;
-	private ProgressDialog progressDialog;
-
 	private static final Integer days[] = {0, 1, 2, 3, 4, 5, 6};
-
-    public ProgressDialog getProgressDialog() {
-		return progressDialog;
-	}
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        progressDialogs = new HashMap<Integer, ProgressDialog>();
 
         Intent intent = getIntent();
         if(intent != null) {
@@ -69,32 +56,30 @@ public class VirgilioGuidaTvDaySelection extends GenericActivity {
     }
 
 	@Override
-	protected Dialog onCreateDialog(int id) {
-    	ProgressDialog progressDialog = new ProgressDialog(this);
-    	progressDialog.setCancelable(false);
-		switch(id) {
-		case DownloadProgressHandler.START_DOWNLOAD:
-			progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-			progressDialog.setMessage(getString(R.string.contacting_server));
-			break;
-		case DownloadProgressHandler.UPDATE_PROGRESS:
-			progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-			progressDialog.setMax(10000);
-			progressDialog.setMessage(getString(R.string.analyzing_data));
-			break;
-		case DownloadProgressHandler.START_LOAD:
-			progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-			progressDialog.setMessage(getString(R.string.loading_data));
-			break;
-		case DownloadProgressHandler.END_PARSE:
-			progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-			progressDialog.setMessage(getString(R.string.saving_data));
-			break;
-		default:
-			return null;
+	protected ProgressDialog innerOnCreateDialog(int id, ProgressDialog progressDialog) {
+		ProgressDialog tmp = super.innerOnCreateDialog(id, progressDialog);
+		if(tmp == null) {
+	    	switch(id) {
+			case DownloadProgressHandler.START_DOWNLOAD:
+				progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+				progressDialog.setMessage(getString(R.string.contacting_server));
+				break;
+			case DownloadProgressHandler.UPDATE_PROGRESS:
+				progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+				progressDialog.setMax(10000);
+				progressDialog.setMessage(getString(R.string.analyzing_data));
+				break;
+			case DownloadProgressHandler.END_PARSE:
+				progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+				progressDialog.setMessage(getString(R.string.saving_data));
+				break;
+			default:
+				return null;
+			}
+	    	return progressDialog;
 		}
-		progressDialogs.put(id, progressDialog);
-		return progressDialog;
+		else
+			return tmp;
 	}
 
 	@Override
@@ -104,13 +89,6 @@ public class VirgilioGuidaTvDaySelection extends GenericActivity {
 		HttpClientManager.close();
 
 		IOUtils.closeQuietly(CacheManager.getInstance());
-	}
-
-	public void showDownloadDialog(int id) {
-		//showDialog(id);
-		onCreateDialog(id);
-		progressDialog = progressDialogs.get(id);
-		progressDialog.show();
 	}
 
 }

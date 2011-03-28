@@ -13,6 +13,7 @@ import org.apache.commons.collections.map.LRUMap;
 import org.apache.commons.io.IOUtils;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.SQLException;
 
 import com.mscg.virgilio.database.ChannelsManagement;
@@ -99,6 +100,10 @@ public class CacheManager implements Closeable, ProgramsManagement, ChannelsMana
 		if(channelsCache == null)
 			return 0;
 		return channelsCache.size();
+	}
+
+	public Cursor getPrograms() throws SQLException {
+		return db.getPrograms();
 	}
 
 	public synchronized int getProgramsCacheSize() {

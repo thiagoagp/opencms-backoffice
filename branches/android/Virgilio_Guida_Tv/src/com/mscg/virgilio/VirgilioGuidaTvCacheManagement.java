@@ -16,6 +16,7 @@ public class VirgilioGuidaTvCacheManagement extends GenericActivity {
 	private TextView memoryChannels;
 	private TextView dbElements;
 
+	private Button analyzeDBElems;
 	private Button emptyCacheButton;
 	private Button emptyOlderDBButton;
 	private Button emptyDBButton;
@@ -32,13 +33,15 @@ public class VirgilioGuidaTvCacheManagement extends GenericActivity {
 		memoryChannels = (TextView)findViewById(R.id.channelsInMemory);
 		dbElements = (TextView)findViewById(R.id.elementsInDB);
 
+		analyzeDBElems = (Button)findViewById(R.id.analyzeDB);
 		emptyCacheButton = (Button)findViewById(R.id.emptyCache);
 		emptyOlderDBButton = (Button)findViewById(R.id.emptyOlderDB);
 		emptyDBButton = (Button)findViewById(R.id.emptyDB);
 
 		guiHandler = new CacheManagementHandler(this);
 
-		new CacheManagementButtonListener(this, emptyCacheButton, emptyOlderDBButton, emptyDBButton);
+		new CacheManagementButtonListener(this, analyzeDBElems, emptyCacheButton,
+				                          emptyOlderDBButton, emptyDBButton);
 	}
 
 	@Override
