@@ -3,9 +3,11 @@ package com.mscg.virgilio;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CheckBox;
@@ -20,6 +22,49 @@ import com.mscg.virgilio.listener.AnalyzeDBClickListener;
 import com.mscg.virgilio.util.CacheManager;
 
 public class VirgilioGuidaTvDbAnalyze extends GenericActivity implements OnCheckedChangeListener {
+
+	private class DeleteItemsThread extends Thread {
+		@Override
+		public void run() {
+			Message msg = guiHandler.obtainMessage();
+		    Bundle b = new Bundle();
+		    b.putInt(DownloadProgressHandler.TYPE, DownloadProgressHandler.START_DELETE);
+		    msg.setData(b);
+		    guiHandler.sendMessage(msg);
+
+		    int index = 1;
+		    int total = 0;
+		    for(Map.Entry<Integer, Boolean> entry : checkedElems.entrySet()) {
+				if(entry.getValue()) {
+					total++;
+				}
+			}
+		    for(Map.Entry<Integer, Boolean> entry : checkedElems.entrySet()) {
+				if(entry.getValue()) {
+					// the element must be deleted from the DB
+					msg = guiHandler.obtainMessage();
+				    b = new Bundle();
+				    b.putInt(DownloadProgressHandler.TYPE, DownloadProgressHandler.DELETE_PROGRESS);
+				    msg.setData(b);
+				    msg.arg1 = index++;
+				    msg.arg2 = total;
+				    guiHandler.sendMessage(msg);
+
+				    // TODO: implementare cancellazione su DB
+				    try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+					}
+				}
+			}
+
+		    msg = guiHandler.obtainMessage();
+		    b = new Bundle();
+		    b.putInt(DownloadProgressHandler.TYPE, DownloadProgressHandler.END_DELETE);
+		    msg.setData(b);
+		    guiHandler.sendMessage(msg);
+		}
+	}
 
 	private Handler guiHandler;
 
@@ -53,6 +98,24 @@ public class VirgilioGuidaTvDbAnalyze extends GenericActivity implements OnCheck
 		selectAll.setOnCheckedChangeListener(this);
 		programsList.setAdapter(new DBAnalyzeListItemAdapter(this, R.layout.db_analyze_element_layout, cur, false));
 		programsList.setOnItemClickListener(new AnalyzeDBClickListener(this, guiHandler));
+	}
+
+	@Override
+	protected ProgressDialog innerOnCreateDialog(int id, ProgressDialog progressDialog) {
+		ProgressDialog tmp = super.innerOnCreateDialog(id, progressDialog);
+		if(tmp == null) {
+	    	switch(id) {
+			case DownloadProgressHandler.START_DELETE:
+				progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+				progressDialog.setMessage(getString(R.string.db_analyze_start_delete));
+				break;
+			default:
+				return null;
+			}
+	    	return progressDialog;
+		}
+		else
+			return tmp;
 	}
 
 	@Override
@@ -94,13 +157,7 @@ public class VirgilioGuidaTvDbAnalyze extends GenericActivity implements OnCheck
 		if(!ret) {
 			switch(item.getItemId()) {
 			case MENU_DELETE:
-				for(Map.Entry<Integer, Boolean> entry : checkedElems.entrySet()) {
-					if(entry.getValue()) {
-						// the element must be deleted from the DB
-
-						// TODO implement deletion
-					}
-				}
+				new DeleteItemsThread().start();
 				return true;
 			}
 		}

@@ -40,6 +40,8 @@
     <string name="db_analyze_empty_title">DB vuoto</string>
     <string name="db_analyze_empty_text">Non sono presenti palinsesti salvati su DB</string>
     <string name="db_analyze_select_all">Seleziona tutti</string>
+    <string name="db_analyze_start_delete">Cancellazione in corso...</string>
+    <string name="db_analyze_delete_progress">Cancellazione in corso... ${item} / ${total}</string>
     
     <string name="details_title">Dettagli programma</string>
     

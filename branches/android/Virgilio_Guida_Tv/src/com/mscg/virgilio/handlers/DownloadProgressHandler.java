@@ -24,6 +24,9 @@ public class DownloadProgressHandler extends Handler {
 	public static final int START_LOAD = 4;
 	public static final int END_SAVE = 5;
 	public static final int ERROR = 6;
+	public static final int START_DELETE = 7;
+	public static final int DELETE_PROGRESS = 8;
+	public static final int END_DELETE = 9;
 
 	private GenericActivity context;
 
@@ -33,6 +36,7 @@ public class DownloadProgressHandler extends Handler {
 
 	@Override
 	public void handleMessage(Message msg) {
+		String message = null;
 		Bundle b = msg.getData();
 		int caseValue = b.getInt(TYPE);
 		switch(caseValue) {
@@ -49,6 +53,7 @@ public class DownloadProgressHandler extends Handler {
 		case END_DOWNLOAD:
 			break;
 		case START_DOWNLOAD:
+		case START_DELETE:
 		case END_PARSE:
 			if(context.getProgressDialog() != null)
 				context.getProgressDialog().dismiss();
@@ -69,6 +74,17 @@ public class DownloadProgressHandler extends Handler {
 			ad.setMessage(context.getString(R.string.error_text) + " " + b.getString(MESSAGE));
 			ad.setCancelable(true);
 			ad.show();
+			break;
+		case DELETE_PROGRESS:
+			message = context.getString(R.string.db_analyze_delete_progress);
+			context.getProgressDialog().setMessage(
+				message.replace("${item}", "" + msg.arg1)
+				       .replace("${total}", "" + msg.arg2));
+			break;
+		case END_DELETE:
+			if(context.getProgressDialog() != null)
+				context.getProgressDialog().dismiss();
+			context.finish();
 			break;
 		}
 	}

@@ -52,7 +52,7 @@ public class DBAnalyzeListItemAdapter extends ResourceCursorAdapter {
 		holder.dayName.setText(dateFormat.format(holder.date));
 		holder.dayName.setTag(holder);
 		boolean checked = ((VirgilioGuidaTvDbAnalyze)context).isElementChecked(holder.id);
-		holder.selected.setSelected(checked);
+		holder.selected.setChecked(checked);
 		holder.listener.setProgramID(cursor.getInt(ProgramsDB.PROGRAMS_CONSTS.ID_COL_INDEX));
 	}
 
