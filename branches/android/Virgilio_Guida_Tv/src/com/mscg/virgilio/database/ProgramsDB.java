@@ -568,6 +568,17 @@ public class ProgramsDB implements Closeable, ProgramsManagement, ChannelsManage
 
 	}
 
+	@Override
+	public void removeProgramById(long id) throws SQLException {
+		removePrograms(id);
+
+		// remove the matching program
+		db.delete(
+				PROGRAMS_CONSTS.TABLE_NAME,
+				PROGRAMS_CONSTS.ID_COL + " = ?",
+				new String[] {Long.toString(id)});
+	}
+
 	/* (non-Javadoc)
 	 * @see com.mscg.virgilio.database.ProgramsManagement#savePrograms(com.mscg.virgilio.programs.Programs)
 	 */

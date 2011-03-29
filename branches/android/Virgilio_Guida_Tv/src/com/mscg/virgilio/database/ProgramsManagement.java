@@ -21,6 +21,8 @@ public interface ProgramsManagement {
 
 	public void removeOlderPrograms(int numDays) throws SQLException;
 
+	public void removeProgramById(long id) throws SQLException;
+
 	public Programs savePrograms(Programs programs) throws SQLException;
 
 }

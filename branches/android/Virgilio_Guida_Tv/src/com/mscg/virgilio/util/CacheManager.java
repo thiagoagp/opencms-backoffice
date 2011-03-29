@@ -173,6 +173,19 @@ public class CacheManager implements Closeable, ProgramsManagement, ChannelsMana
 	}
 
 	@Override
+	public void removeProgramById(long id) throws SQLException {
+		Set<Map.Entry> entrySet = programsCache.entrySet();
+		for(Map.Entry entry : entrySet) {
+			Programs p = (Programs)entry.getValue();
+			if(p.getId() == id) {
+				programsCache.remove(entry.getKey());
+				break;
+			}
+		}
+		db.removeProgramById(id);
+	}
+
+	@Override
 	public synchronized Programs savePrograms(Programs programs) throws SQLException {
 		Programs ret = db.savePrograms(programs);
 		saveProgramsInCache(ret);

@@ -23,17 +23,17 @@ public class AnalyzeDBClickListener extends ContextAndHandlerAware implements On
 																			  OnClickListener,
 																			  OnCheckedChangeListener {
 
-	private Integer programID;
+	private Long programID;
 
 	public AnalyzeDBClickListener(Context context, Handler guiHandler) {
 		super(context, guiHandler);
 	}
 
-	public Integer getProgramID() {
+	public Long getProgramID() {
 		return programID;
 	}
 
-	public void setProgramID(Integer programID) {
+	public void setProgramID(Long programID) {
 		this.programID = programID;
 	}
 

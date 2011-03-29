@@ -46,20 +46,20 @@ public class DBAnalyzeListItemAdapter extends ResourceCursorAdapter {
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
 		Holder holder = (Holder) view.getTag();
-		holder.id = cursor.getInt(ProgramsDB.PROGRAMS_CONSTS.ID_COL_INDEX);
+		holder.id = cursor.getLong(ProgramsDB.PROGRAMS_CONSTS.ID_COL_INDEX);
 		long time = cursor.getLong(ProgramsDB.PROGRAMS_CONSTS.DATE_COL_INDEX);
 		holder.date = new Date(time);
 		holder.dayName.setText(dateFormat.format(holder.date));
 		holder.dayName.setTag(holder);
 		boolean checked = ((VirgilioGuidaTvDbAnalyze)context).isElementChecked(holder.id);
 		holder.selected.setChecked(checked);
-		holder.listener.setProgramID(cursor.getInt(ProgramsDB.PROGRAMS_CONSTS.ID_COL_INDEX));
+		holder.listener.setProgramID(holder.id);
 	}
 
 	public class Holder {
 		public Button dayName;
 		public CheckBox selected;
-		public int id;
+		public long id;
 		public Date date;
 		public AnalyzeDBClickListener listener;
 	}
