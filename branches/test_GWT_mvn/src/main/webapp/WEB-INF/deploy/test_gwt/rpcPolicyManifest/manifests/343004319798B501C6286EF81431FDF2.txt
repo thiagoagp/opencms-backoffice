@@ -1,2 +1,0 @@
-serviceClass: com.mscg.test.client.service.GreetingService
-path: 64A6C4592588D228CB9AF42D399F207D.gwt.rpc
