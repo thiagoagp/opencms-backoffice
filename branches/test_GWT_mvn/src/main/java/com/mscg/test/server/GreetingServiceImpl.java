@@ -1,5 +1,8 @@
 package com.mscg.test.server;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.mscg.test.client.service.GreetingService;
 import com.mscg.test.shared.FieldVerifier;
@@ -8,10 +11,15 @@ import com.mscg.test.shared.FieldVerifier;
  * The server side implementation of the RPC service.
  */
 @SuppressWarnings("serial")
-public class GreetingServiceImpl extends RemoteServiceServlet implements
-		GreetingService {
+public class GreetingServiceImpl extends RemoteServiceServlet implements GreetingService {
+
+	protected Logger LOG;
 
 	private String springGreeting;
+
+	public GreetingServiceImpl() {
+		LOG = LoggerFactory.getLogger(this.getClass());
+	}
 
 	/**
 	 * @param springGreeting the springGreeting to set
@@ -20,13 +28,22 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements
 		this.springGreeting = springGreeting;
 	}
 
+	/**
+	 * @return the springGreeting
+	 */
+	public String getSpringGreeting() {
+		return springGreeting;
+	}
+
 	public String greetServer(String input) throws IllegalArgumentException {
+		LOG.debug("Received greeting from " + input);
+
 		// Verify that the input is valid.
 		if (!FieldVerifier.isValidName(input)) {
 			// If the input is not valid, throw an IllegalArgumentException back to
 			// the client.
-			throw new IllegalArgumentException(
-					"Name must be at least 4 characters long");
+			LOG.error("The name is invalid");
+			throw new IllegalArgumentException( "Name must be at least 4 characters long");
 		}
 
 		String serverInfo = getServletContext().getServerInfo();
