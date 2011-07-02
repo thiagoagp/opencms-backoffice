@@ -14,5 +14,9 @@ public class SvnTest {
 	public static void myMethod() {
 	    System.out.println(45);
 	}
+	
+	public static void uselessMethod() {
+		System.out.println("This method is useless");
+	}
 
 }
