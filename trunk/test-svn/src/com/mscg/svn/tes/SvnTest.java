@@ -11,6 +11,7 @@ public class SvnTest {
 		uselessMethod();
 		TestClass tc = new TestClass(4);
 		System.out.println(tc.getNumber());
+		System.out.println("Exiting");
 	}
 	
 	public static void uselessMethod() {
