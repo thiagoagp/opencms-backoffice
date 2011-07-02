@@ -1,5 +1,7 @@
 package com.mscg.svn.tes;
 
+import com.mscg.svn.tes.util.TestClass;
+
 public class SvnTest {
 
 	/**
