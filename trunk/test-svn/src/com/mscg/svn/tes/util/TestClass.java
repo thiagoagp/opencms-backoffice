@@ -1,4 +1,4 @@
-package com.mscg.svn.tes;
+package com.mscg.svn.tes.util;
 
 public class TestClass {
 
