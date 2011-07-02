@@ -11,4 +11,8 @@ public class SvnTest {
 		System.out.println("This line is only in the branch");
 	}
 
+	public static void myMethod() {
+	    System.out.println(45);
+	}
+
 }
