@@ -5,7 +5,7 @@ public class TestClass {
 	private int number;
 
 	public TestClass(int number) {
-		this.number = number / 2;
+		setNumber(number);
 	}
 
 	public int getNumber() {
