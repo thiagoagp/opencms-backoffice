@@ -7,6 +7,7 @@ public class SvnTest {
 	 */
 	public static void main(String[] args) {
 		System.out.println("This is a simple svn branch test");
+		System.out.println("This line is only in the branch");
 	}
 
 }
