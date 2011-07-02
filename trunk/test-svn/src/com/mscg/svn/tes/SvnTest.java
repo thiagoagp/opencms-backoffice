@@ -9,5 +9,9 @@ public class SvnTest {
 		System.out.println("This is a simple svn branch test");
 		System.out.println("This line came from the main trunk");
 	}
+	
+	public static void uselessMethod() {
+		System.out.println("This method is useless");
+	}
 
 }
