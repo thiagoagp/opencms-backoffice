@@ -22,32 +22,30 @@ import com.mscg.virgilio.util.net.VirgilioURLUtil;
 
 public class ProgramSelectionClickListener extends ContextAndHandlerAware implements OnItemClickListener {
 
-	public ProgramSelectionClickListener(VirgilioGuidaTvPrograms context, Handler guiHandler) {
-		super(context, guiHandler);
-	}
+    public ProgramSelectionClickListener(VirgilioGuidaTvPrograms context, Handler guiHandler) {
+        super(context, guiHandler);
+    }
 
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		ProgramLinearLayout pll = (ProgramLinearLayout) view;
-		TVProgram program = pll.getTvProgram();
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        ProgramLinearLayout pll = (ProgramLinearLayout) view;
+        TVProgram program = pll.getTvProgram();
 
-		if(program.getProgramDetails() == null) {
-			String url = VirgilioURLUtil.DETAILS_URL.replace("${programID}", program.getStrId());
-			HttpGet get = new HttpGet(url);
-			AsynchResponseHandler<String> responseHandler =
-				new ProgramsDetailsResponseHandler(context, guiHandler, program);
-			HttpClientManager.executeAsynchMethod(get, responseHandler);
-		}
-		else {
-			if(guiHandler instanceof ProgramsDetailsHandler)
-				((ProgramsDetailsHandler)guiHandler).setProgram(program);
+        if (program.getProgramDetails() == null) {
+            String url = VirgilioURLUtil.DETAILS_URL.replace("${programID}", program.getStrId());
+            HttpGet get = new HttpGet(url);
+            AsynchResponseHandler<String> responseHandler = new ProgramsDetailsResponseHandler(context, guiHandler, program);
+            HttpClientManager.executeAsynchMethod(get, responseHandler);
+        } else {
+            if (guiHandler instanceof ProgramsDetailsHandler)
+                ((ProgramsDetailsHandler) guiHandler).setProgram(program);
 
-			Message msg = guiHandler.obtainMessage();
+            Message msg = guiHandler.obtainMessage();
             Bundle b = new Bundle();
             b.putInt(DownloadProgressHandler.TYPE, DownloadProgressHandler.END_PARSE);
             msg.setData(b);
             guiHandler.sendMessage(msg);
-		}
-	}
+        }
+    }
 
 }

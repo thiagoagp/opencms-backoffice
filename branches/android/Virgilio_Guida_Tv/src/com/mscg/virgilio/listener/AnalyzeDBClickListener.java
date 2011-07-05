@@ -19,53 +19,52 @@ import com.mscg.virgilio.programs.Programs;
 import com.mscg.virgilio.util.CacheManager;
 import com.mscg.virgilio.util.ContextAndHandlerAware;
 
-public class AnalyzeDBClickListener extends ContextAndHandlerAware implements OnItemClickListener,
-																			  OnClickListener,
-																			  OnCheckedChangeListener {
+public class AnalyzeDBClickListener extends ContextAndHandlerAware implements OnItemClickListener, OnClickListener,
+                                                                  OnCheckedChangeListener {
 
-	private Long programID;
+    private Long programID;
 
-	public AnalyzeDBClickListener(Context context, Handler guiHandler) {
-		super(context, guiHandler);
-	}
+    public AnalyzeDBClickListener(Context context, Handler guiHandler) {
+        super(context, guiHandler);
+    }
 
-	public Long getProgramID() {
-		return programID;
-	}
+    public Long getProgramID() {
+        return programID;
+    }
 
-	public void setProgramID(Long programID) {
-		this.programID = programID;
-	}
+    public void setProgramID(Long programID) {
+        this.programID = programID;
+    }
 
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		onClick(view);
-	}
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        onClick(view);
+    }
 
-	@Override
-	public void onClick(View view) {
-		final Holder holder = (Holder) view.getTag();
+    @Override
+    public void onClick(View view) {
+        final Holder holder = (Holder) view.getTag();
 
-		((GenericActivity)context).showDownloadDialog(DownloadProgressHandler.START_LOAD);
-		new Thread() {
+        ((GenericActivity) context).showDownloadDialog(DownloadProgressHandler.START_LOAD);
+        new Thread() {
 
-			@Override
-			public void run() {
-				Programs programs = CacheManager.getInstance().getProgramsForDay(holder.date);
-				Message msg = guiHandler.obtainMessage();
-	            Bundle b = new Bundle();
-	            b.putInt(DownloadProgressHandler.TYPE, DownloadProgressHandler.END_SAVE);
-	            b.putSerializable(DownloadProgressHandler.PROGRAMS, programs);
-	            msg.setData(b);
-	            guiHandler.sendMessage(msg);
-			}
+            @Override
+            public void run() {
+                Programs programs = CacheManager.getInstance().getProgramsForDay(holder.date);
+                Message msg = guiHandler.obtainMessage();
+                Bundle b = new Bundle();
+                b.putInt(DownloadProgressHandler.TYPE, DownloadProgressHandler.END_SAVE);
+                b.putSerializable(DownloadProgressHandler.PROGRAMS, programs);
+                msg.setData(b);
+                guiHandler.sendMessage(msg);
+            }
 
-		}.start();
-	}
+        }.start();
+    }
 
-	@Override
-	public void onCheckedChanged(CompoundButton checkbox, boolean isChecked) {
-		((VirgilioGuidaTvDbAnalyze)context).setElementChecked(programID, isChecked);
-	}
+    @Override
+    public void onCheckedChanged(CompoundButton checkbox, boolean isChecked) {
+        ((VirgilioGuidaTvDbAnalyze) context).setElementChecked(programID, isChecked);
+    }
 
 }

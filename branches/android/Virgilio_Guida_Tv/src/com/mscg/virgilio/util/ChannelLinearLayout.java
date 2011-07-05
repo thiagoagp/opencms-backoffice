@@ -8,28 +8,28 @@ import com.mscg.virgilio.programs.Channel;
 
 public class ChannelLinearLayout extends LinearLayout {
 
-	private Channel channel;
+    private Channel channel;
 
-	public ChannelLinearLayout(Channel channel, Context context) {
-		super(context);
-		setChannel(channel);
-	}
+    public ChannelLinearLayout(Channel channel, Context context) {
+        super(context);
+        setChannel(channel);
+    }
 
-	public ChannelLinearLayout(Channel channel, Context context, AttributeSet attrs) {
-		super(context, attrs);
-		setChannel(channel);
-	}
+    public ChannelLinearLayout(Channel channel, Context context, AttributeSet attrs) {
+        super(context, attrs);
+        setChannel(channel);
+    }
 
-	public ChannelLinearLayout(Context context) {
-		this(null, context);
-	}
+    public ChannelLinearLayout(Context context) {
+        this(null, context);
+    }
 
-	public Channel getChannel() {
-		return channel;
-	}
+    public Channel getChannel() {
+        return channel;
+    }
 
-	public void setChannel(Channel channel) {
-		this.channel = channel;
-	}
+    public void setChannel(Channel channel) {
+        this.channel = channel;
+    }
 
 }

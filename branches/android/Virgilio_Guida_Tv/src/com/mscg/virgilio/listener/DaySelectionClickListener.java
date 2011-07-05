@@ -26,48 +26,47 @@ import com.mscg.virgilio.util.net.VirgilioURLUtil;
 
 public class DaySelectionClickListener extends ContextAndHandlerAware implements OnItemClickListener {
 
-	public DaySelectionClickListener(VirgilioGuidaTvDaySelection context, Handler guiHandler) {
-		super(context, guiHandler);
-	}
+    public DaySelectionClickListener(VirgilioGuidaTvDaySelection context, Handler guiHandler) {
+        super(context, guiHandler);
+    }
 
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		DayLinearLayout dll = (DayLinearLayout)view;
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        DayLinearLayout dll = (DayLinearLayout) view;
 
-		final Calendar day = dll.getDay();
-		String url = VirgilioURLUtil.URLS.get(day.get(Calendar.DAY_OF_WEEK));
+        final Calendar day = dll.getDay();
+        String url = VirgilioURLUtil.URLS.get(day.get(Calendar.DAY_OF_WEEK));
 
-		boolean existsLocally = false;
-		try {
-			existsLocally = CacheManager.getInstance().containsProgramsForDay(day.getTime());
-		} catch(Exception e) {
-			Log.e(DaySelectionClickListener.class.getCanonicalName(),
-				"Cannot query DB", e);
-		}
+        boolean existsLocally = false;
+        try {
+            existsLocally = CacheManager.getInstance().containsProgramsForDay(day.getTime());
+        } catch (Exception e) {
+            Log.e(DaySelectionClickListener.class.getCanonicalName(), "Cannot query DB", e);
+        }
 
-		if(!existsLocally) {
-			HttpGet get = new HttpGet(url);
-			AsynchResponseHandler<String> responseHandler = new ProgramsDownloadResponseHandler(
-				(VirgilioGuidaTvDaySelection)context, guiHandler);
-			HttpClientManager.executeAsynchMethod(get, responseHandler);
-		}
-		else {
-			((GenericActivity)context).showDownloadDialog(DownloadProgressHandler.START_LOAD);
-			new Thread() {
+        if (!existsLocally) {
+            HttpGet get = new HttpGet(url);
+            AsynchResponseHandler<String> responseHandler = new ProgramsDownloadResponseHandler(
+                                                                                                (VirgilioGuidaTvDaySelection) context,
+                                                                                                guiHandler);
+            HttpClientManager.executeAsynchMethod(get, responseHandler);
+        } else {
+            ((GenericActivity) context).showDownloadDialog(DownloadProgressHandler.START_LOAD);
+            new Thread() {
 
-				@Override
-				public void run() {
-					Programs programs = CacheManager.getInstance().getProgramsForDay(day.getTime());
-					Message msg = guiHandler.obtainMessage();
-		            Bundle b = new Bundle();
-		            b.putInt(DownloadProgressHandler.TYPE, DownloadProgressHandler.END_SAVE);
-		            b.putSerializable(DownloadProgressHandler.PROGRAMS, programs);
-		            msg.setData(b);
-		            guiHandler.sendMessage(msg);
-				}
+                @Override
+                public void run() {
+                    Programs programs = CacheManager.getInstance().getProgramsForDay(day.getTime());
+                    Message msg = guiHandler.obtainMessage();
+                    Bundle b = new Bundle();
+                    b.putInt(DownloadProgressHandler.TYPE, DownloadProgressHandler.END_SAVE);
+                    b.putSerializable(DownloadProgressHandler.PROGRAMS, programs);
+                    msg.setData(b);
+                    guiHandler.sendMessage(msg);
+                }
 
-			}.start();
-		}
-	}
+            }.start();
+        }
+    }
 
 }

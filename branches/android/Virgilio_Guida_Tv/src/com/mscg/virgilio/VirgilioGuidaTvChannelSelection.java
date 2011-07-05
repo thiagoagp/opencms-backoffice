@@ -20,59 +20,57 @@ import com.mscg.virgilio.util.Util;
 
 public class VirgilioGuidaTvChannelSelection extends GenericActivity {
 
-	private TextView channelsListIntro;
-	private ListView channelsList;
-	private ArrayAdapter<Channel> channelsListAdapter;
+    private TextView channelsListIntro;
+    private ListView channelsList;
+    private ArrayAdapter<Channel> channelsListAdapter;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.channels_selection);
+        setContentView(R.layout.channels_selection);
 
-		channelsListIntro = (TextView) findViewById(R.id.channelsListIntro);
-		channelsList = (ListView) findViewById(R.id.channelsList);
-		channelsList.setOnItemClickListener(new ChannelSelectionClickListener(this));
+        channelsListIntro = (TextView) findViewById(R.id.channelsListIntro);
+        channelsList = (ListView) findViewById(R.id.channelsList);
+        channelsList.setOnItemClickListener(new ChannelSelectionClickListener(this));
 
-		Intent intent = getIntent();
-		Date day = null;
-		try {
-			day = (Date) intent.getSerializableExtra(DownloadProgressHandler.PROGRAMS);
-		} catch(Exception e) {
-			Log.e(VirgilioGuidaTvChannelSelection.class.getCanonicalName(),
-					"Cannot get programs date from intent", e);
-		}
+        Intent intent = getIntent();
+        Date day = null;
+        try {
+            day = (Date) intent.getSerializableExtra(DownloadProgressHandler.PROGRAMS);
+        } catch (Exception e) {
+            Log.e(VirgilioGuidaTvChannelSelection.class.getCanonicalName(), "Cannot get programs date from intent", e);
+        }
 
-		if(day != null) {
-			Programs programs = CacheManager.getInstance().getProgramsForDay(day);
+        if (day != null) {
+            Programs programs = CacheManager.getInstance().getProgramsForDay(day);
 
-			if(programs != null) {
-				day = programs.getDate();
+            if (programs != null) {
+                day = programs.getDate();
 
-				channelsListAdapter = new ChannelListItemAdapter(this, R.layout.channel_list_layout, programs.getChannels());
-				channelsList.setAdapter(channelsListAdapter);
+                channelsListAdapter = new ChannelListItemAdapter(this, R.layout.channel_list_layout, programs.getChannels());
+                channelsList.setAdapter(channelsListAdapter);
 
-				SimpleDateFormat dayFormat = new SimpleDateFormat("EEEEE");
-				SimpleDateFormat dateFormat = new SimpleDateFormat(", dd/MM");
-				String intro = getString(R.string.select_channel_intro);
-				intro = intro.replace("${dayName}", Util.capitalize(dayFormat.format(day)) + dateFormat.format(day));
-				channelsListIntro.setText(intro);
-			}
-		}
-		else {
-			channelsListIntro.setText(R.string.select_channel_fail);
-		}
-	}
+                SimpleDateFormat dayFormat = new SimpleDateFormat("EEEEE");
+                SimpleDateFormat dateFormat = new SimpleDateFormat(", dd/MM");
+                String intro = getString(R.string.select_channel_intro);
+                intro = intro.replace("${dayName}", Util.capitalize(dayFormat.format(day)) + dateFormat.format(day));
+                channelsListIntro.setText(intro);
+            }
+        } else {
+            channelsListIntro.setText(R.string.select_channel_fail);
+        }
+    }
 
-	@Override
-	protected void onStart() {
-		super.onStart();
+    @Override
+    protected void onStart() {
+        super.onStart();
 
-	}
+    }
 
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-	}
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 
 }

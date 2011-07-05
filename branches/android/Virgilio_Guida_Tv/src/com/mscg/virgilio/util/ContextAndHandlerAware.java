@@ -5,11 +5,11 @@ import android.os.Handler;
 
 public class ContextAndHandlerAware extends ContextAware {
 
-	protected Handler guiHandler;
+    protected Handler guiHandler;
 
-	public ContextAndHandlerAware(Context context, Handler guiHandler) {
-		super(context);
-		this.guiHandler = guiHandler;
-	}
+    public ContextAndHandlerAware(Context context, Handler guiHandler) {
+        super(context);
+        this.guiHandler = guiHandler;
+    }
 
 }

@@ -14,24 +14,22 @@ import com.mscg.virgilio.util.ContextAware;
 
 public class ChannelSelectionClickListener extends ContextAware implements OnItemClickListener {
 
-	public ChannelSelectionClickListener(VirgilioGuidaTvChannelSelection context) {
-		super(context);
-	}
+    public ChannelSelectionClickListener(VirgilioGuidaTvChannelSelection context) {
+        super(context);
+    }
 
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		ChannelLinearLayout cll = (ChannelLinearLayout)view;
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        ChannelLinearLayout cll = (ChannelLinearLayout) view;
 
-		Channel channel = cll.getChannel();
+        Channel channel = cll.getChannel();
 
-		Intent intent = new Intent(context, VirgilioGuidaTvPrograms.class);
-		intent.putExtra(VirgilioGuidaTvPrograms.CHANNEL, channel.getId());
-		intent.putExtra(VirgilioGuidaTvPrograms.PROGRAMS, channel.getPrograms().getId());
-		CacheManager.getInstance().saveChannel(
-			channel.getPrograms().getId(),
-			channel.getId(), channel);
+        Intent intent = new Intent(context, VirgilioGuidaTvPrograms.class);
+        intent.putExtra(VirgilioGuidaTvPrograms.CHANNEL, channel.getId());
+        intent.putExtra(VirgilioGuidaTvPrograms.PROGRAMS, channel.getPrograms().getId());
+        CacheManager.getInstance().saveChannel(channel.getPrograms().getId(), channel.getId(), channel);
 
-		context.startActivity(intent);
-	}
+        context.startActivity(intent);
+    }
 
 }

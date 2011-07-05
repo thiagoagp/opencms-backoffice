@@ -6,15 +6,15 @@ import android.view.View.OnClickListener;
 
 public class DetailsButtonsListener implements OnClickListener {
 
-	private Dialog dialog;
+    private Dialog dialog;
 
-	public DetailsButtonsListener(Dialog dialog) {
-		this.dialog = dialog;
-	}
+    public DetailsButtonsListener(Dialog dialog) {
+        this.dialog = dialog;
+    }
 
-	@Override
-	public void onClick(View v) {
-		dialog.dismiss();
-	}
+    @Override
+    public void onClick(View v) {
+        dialog.dismiss();
+    }
 
 }

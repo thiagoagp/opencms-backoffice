@@ -14,42 +14,41 @@ import com.mscg.virgilio.util.ChannelLinearLayout;
 
 public class ChannelListItemAdapter extends GenericListItemAdapter<Channel> {
 
-	public ChannelListItemAdapter(Context context, int textViewResourceId, Channel[] objects) {
-		this(context, textViewResourceId, Arrays.asList(objects));
-	}
+    public ChannelListItemAdapter(Context context, int textViewResourceId, Channel[] objects) {
+        this(context, textViewResourceId, Arrays.asList(objects));
+    }
 
-	public ChannelListItemAdapter(Context context, int textViewResourceId, List<Channel> objects) {
-		super(context, textViewResourceId, objects);
-	}
+    public ChannelListItemAdapter(Context context, int textViewResourceId, List<Channel> objects) {
+        super(context, textViewResourceId, objects);
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		ChannelLinearLayout itemView = null;
-		Channel channel = getItem(position);
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        ChannelLinearLayout itemView = null;
+        Channel channel = getItem(position);
 
-		InfoHolder holder = null;
+        InfoHolder holder = null;
 
-		if(convertView == null) {
-			itemView = new ChannelLinearLayout(null, getContext());
-			vi.inflate(textViewResourceId, itemView, true);
-			holder = new InfoHolder();
-			holder.textView = (TextView)itemView.findViewById(R.id.channelName);
-			itemView.setTag(holder);
-		}
-		else {
-			itemView = (ChannelLinearLayout)convertView;
-			holder = (InfoHolder)itemView.getTag();
-		}
+        if (convertView == null) {
+            itemView = new ChannelLinearLayout(null, getContext());
+            vi.inflate(textViewResourceId, itemView, true);
+            holder = new InfoHolder();
+            holder.textView = (TextView) itemView.findViewById(R.id.channelName);
+            itemView.setTag(holder);
+        } else {
+            itemView = (ChannelLinearLayout) convertView;
+            holder = (InfoHolder) itemView.getTag();
+        }
 
-		itemView.setChannel(channel);
+        itemView.setChannel(channel);
 
-		holder.textView.setText(channel.getName());
+        holder.textView.setText(channel.getName());
 
-		return itemView;
-	}
+        return itemView;
+    }
 
-	private class InfoHolder {
-		TextView textView;
-	}
+    private class InfoHolder {
+        TextView textView;
+    }
 
 }

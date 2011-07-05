@@ -8,28 +8,28 @@ import com.mscg.virgilio.programs.TVProgram;
 
 public class ProgramLinearLayout extends LinearLayout {
 
-	private TVProgram tvProgram;
+    private TVProgram tvProgram;
 
-	public ProgramLinearLayout(TVProgram tvProgram, Context context) {
-		super(context);
-		setTvProgram(tvProgram);
-	}
+    public ProgramLinearLayout(TVProgram tvProgram, Context context) {
+        super(context);
+        setTvProgram(tvProgram);
+    }
 
-	public ProgramLinearLayout(TVProgram tvProgram, Context context, AttributeSet attrs) {
-		super(context, attrs);
-		setTvProgram(tvProgram);
-	}
+    public ProgramLinearLayout(TVProgram tvProgram, Context context, AttributeSet attrs) {
+        super(context, attrs);
+        setTvProgram(tvProgram);
+    }
 
-	public ProgramLinearLayout(Context context) {
-		this(null, context);
-	}
+    public ProgramLinearLayout(Context context) {
+        this(null, context);
+    }
 
-	public TVProgram getTvProgram() {
-		return tvProgram;
-	}
+    public TVProgram getTvProgram() {
+        return tvProgram;
+    }
 
-	public void setTvProgram(TVProgram tvProgram) {
-		this.tvProgram = tvProgram;
-	}
+    public void setTvProgram(TVProgram tvProgram) {
+        this.tvProgram = tvProgram;
+    }
 
 }
