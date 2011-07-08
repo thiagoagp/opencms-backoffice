@@ -25,6 +25,8 @@
     <string name="select_channel_title">Virgilio Guida Tv - Selezione canale</string>
     <string name="select_channel_intro">${dayName} - Seleziona un canale dalla lista per vederne la programmazione</string>
     <string name="select_channel_fail">Non è stato possibile caricare la lista dei canali per il giorno selezionato</string>
+    <string name="search_channels">Cerca canali</string>
+    <string name="search_channels_hint">Digita per filtrare la lista dei canali</string>
 
     <string name="programs_list_title_simple">Virgilio Guida Tv - Programmi</string>
     <string name="programs_list_title">Virgilio Guida Tv - ${channelName} - Programmi</string>

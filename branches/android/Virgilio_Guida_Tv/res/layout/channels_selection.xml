@@ -10,12 +10,20 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         style="@style/daysListIntro" />
-    
+       
     <ListView
         android:id="@+id/channelsList"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:textFilterEnabled="true"
         android:fastScrollEnabled="true" />
-    
+
+    <EditText
+        android:id="@+id/channelListSearch"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/search_channels_hint"
+        android:visibility="gone" />
+
 </LinearLayout>

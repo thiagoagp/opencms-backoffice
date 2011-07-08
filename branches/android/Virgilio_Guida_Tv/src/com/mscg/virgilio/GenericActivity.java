@@ -21,10 +21,12 @@ public class GenericActivity extends Activity {
     public static final int MENU_GROUP = 0;
     public static final int MENU_CACHE = Menu.FIRST;
     public static final int MENU_DELETE = Menu.FIRST + 1;
-    public static final int MENU_EXIT = Menu.FIRST + 2;
+    public static final int MENU_SEARCHCHANNEL = Menu.FIRST + 2;
+    public static final int MENU_EXIT = Menu.FIRST + 3;
 
     protected MenuItem cache;
     protected MenuItem delete;
+    protected MenuItem searchChannel;
     protected MenuItem exit;
 
     protected ProgressDialog progressDialog;
@@ -48,9 +50,13 @@ public class GenericActivity extends Activity {
         delete.setIcon(android.R.drawable.ic_menu_delete);
         delete.setShortcut('1', 'd');
 
+        searchChannel = menu.add(MENU_GROUP, MENU_SEARCHCHANNEL, Menu.NONE, R.string.search_channels);
+        searchChannel.setIcon(android.R.drawable.ic_menu_search);
+        searchChannel.setShortcut('2', 's');
+
         exit = menu.add(MENU_GROUP, MENU_EXIT, Menu.NONE, R.string.exit);
         exit.setIcon(android.R.drawable.ic_lock_power_off);
-        exit.setShortcut('2', 'e');
+        exit.setShortcut('3', 'e');
 
         return true;
     }
@@ -62,6 +68,7 @@ public class GenericActivity extends Activity {
         cache.setEnabled(true);
 
         delete.setVisible(false);
+        searchChannel.setVisible(false);
 
         return true;
     }

@@ -6,9 +6,9 @@ import java.util.List;
 
 /**
  * This class stores informations about all programs for a specific TV channel.
- * 
+ *
  * @author Giuseppe Miscione
- * 
+ *
  */
 public class Channel implements Serializable {
 
@@ -145,6 +145,10 @@ public class Channel implements Serializable {
 
     @Override
     public String toString() {
+        return name;
+    }
+
+    public String toString2() {
         return "Channel [id=" + id + ", name=" + name + ", strId=" + strId + ", tvPrograms=" + tvPrograms + ", types=" + types
                + "]";
     }
